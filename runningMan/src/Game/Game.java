@@ -11,5 +11,30 @@ package Game;
  */
 public class Game {
     
+    private Player player;
+    private Character character;
+    private GameState currentState;
     
+    public Game(Player player, int startingX, int startingY) {
+        
+        this.player = player;
+        this.character = new Character(startingX, startingY);
+        this.currentState = new GameState();
+    }
+    
+    public Player getPlayer() {
+        return this.player;
+    }
+    
+    public Character getCharacter() {
+        return this.character;
+    }
+    
+    public GameState currentState() {
+        return this.currentState;
+    }
+    
+    public void incrementScore(int amount) {
+        this.currentState.incrementScore(amount);
+    }
 }
