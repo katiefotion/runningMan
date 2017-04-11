@@ -22,7 +22,7 @@ public class RunningMan {
         
         // TODO: Find a way to calculate center of screen (or wherever player should begin on screen)
         Game game = new Game(player, 400, 400);
-        
+        Window w = new Window(600,400,"Running Man", game);
         // Randomly generate set of complications for first game state
         
         // Take player's input to move character
