@@ -6,17 +6,28 @@
 package Complication;
 
 import Complication.Complication;
+import java.awt.Image;
 
 /**
  *
- * @author katie
+ * @author darrylRaveche
  */
 public class Pit extends Complication{
     
+    Image pit;
+    public Pit()
+    {
+        //empty constructor
+    }
     public Pit(int x, int y) {
-        super(x, y);
+        initPit(x,y);
     }
     
+ public void initPit(int x, int y)
+    {
+        pit = null; //filepath to obstacle image
+        initObject(x,y,0,0);
+    }
     // Used in GameState class
     @Override 
     public boolean isPit() {

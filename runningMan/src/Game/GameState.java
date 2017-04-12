@@ -20,7 +20,7 @@ public class GameState {
     
     public GameState() {
         
-        this.complications = null;      //TODO: Maybe change this to call automatic generator of complications
+        this.complications = (List<Complication>) new Complication();      //TODO: Maybe change this to call automatic generator of complications
         this.currentScore = 0;
     }
     
