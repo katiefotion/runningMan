@@ -18,7 +18,7 @@ public class Character extends GameObject{
     }
 
     @Override
-    public void tick() {
+    public void tick(int x, int y) {
         
     }
 
