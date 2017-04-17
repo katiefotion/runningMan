@@ -4,17 +4,29 @@
  * and open the template in the editor.
  */
 package Complication;
-
+import java.awt.Image;
 /**
  *
- * @author katie
+ * @author darrylRaveche
  */
 public class Threat extends Complication {
     
+    Image threat;
+    
+    public Threat()
+    {
+        //empty constructor
+    }
     public Threat(int x, int y) {
-        super(x, y);
+        initThreat(x, y);
     }
     
+    public void initThreat(int x, int y)
+    {
+        threat = null; //filepath to obstacle image
+        initObject(x,y,-1,0);
+    }
+     
     // Used in GameState class
     @Override 
     public boolean isThreat() {

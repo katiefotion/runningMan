@@ -6,17 +6,28 @@
 package Complication;
 
 import java.awt.Graphics;
+import java.awt.Image;
 
 /**
  *
- * @author katie
+ * @author darrylraveche
  */
 public class Obstacle extends Complication {
     
+    Image obstacle;
+    public Obstacle() {
+        
+        //empty constructor
+    }
     public Obstacle(int x, int y) {
-        super(x, y);
+        initObstacle(x,y);
     }
     
+    public void initObstacle(int x, int y)
+    {
+        obstacle = null; //filepath to obstacle image
+        initObject(x,y,0,0);
+    }
     // Used in GameState class
     @Override 
     public boolean isObstacle() {

@@ -15,11 +15,23 @@ public abstract class GameObject {
     private int x, y;
     private int velX, velY;
     
+    public GameObject()
+    {
+        //empty consturctor
+    }
     public GameObject(int x, int y){
         this.x = x;
         this.y = y;
     }
-    public abstract void tick();
+    
+    public void initObject(int x, int y, int velX, int velY)
+    {
+        this.x = x;
+        this.y = y;
+        this.velX = velX;
+        this.velY = velY;
+    }
+    public abstract void tick(int x, int y);
     public abstract void render(Graphics g);
 
     public int getX() {
