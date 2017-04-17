@@ -15,13 +15,19 @@ import java.util.List;
 public class HighScores {
   
   public static class PlayerScore {
+    private int hid;
     private String name;
     private double score;
     
-    public PlayerScore(String name, double score) {
+    public PlayerScore(int hid, String name, double score) {
+      this.hid = hid;
       this.name = name;
       this.score = score;
     }
+    
+    public int getHid() {
+      return this.hid;
+    } 
     
     public double getScore() {
       return this.score;
