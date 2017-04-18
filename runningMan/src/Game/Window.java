@@ -22,6 +22,7 @@ public class Window extends Canvas{
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        
+        frame.add(g);
+        g.start();
     }
 }
