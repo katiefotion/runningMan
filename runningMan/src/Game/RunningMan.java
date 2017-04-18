@@ -40,7 +40,7 @@ public class RunningMan {
         Logger.getLogger(RunningMan.class.getName()).log(Level.SEVERE, null, ex);
       } catch (SAXException ex) {
         Logger.getLogger(RunningMan.class.getName()).log(Level.SEVERE, null, ex);
-      }
-    }*/
+      }*/
+    }
     
 }
