@@ -28,7 +28,11 @@ public class Complication extends GameObject{
     }
     
     @Override
-    public void tick(int x, int y) {
+    public void tick() {
+        //TODO: have complication move to the left
+    }
+    //update every some odd seconds, grabbing location of the current character on the screen
+    public void update(int x, int y) {
         
         compChoice = rand.nextInt(3); // produces a random number to spawn a certain obstacle
         

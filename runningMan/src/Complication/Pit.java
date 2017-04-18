@@ -15,6 +15,7 @@ import java.awt.Image;
 public class Pit extends Complication{
     
     Image pit;
+    
     public Pit()
     {
         //empty constructor

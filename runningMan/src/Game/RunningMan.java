@@ -34,13 +34,13 @@ public class RunningMan {
         // Take player's input to move character
         
         //Code below generates 404
-      try {
+      /*try {
         System.out.println(NetClientGet.getHighScores());
       } catch (ParserConfigurationException ex) {
         Logger.getLogger(RunningMan.class.getName()).log(Level.SEVERE, null, ex);
       } catch (SAXException ex) {
         Logger.getLogger(RunningMan.class.getName()).log(Level.SEVERE, null, ex);
       }
-    }
+    }*/
     
 }

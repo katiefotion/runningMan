@@ -15,6 +15,7 @@ import java.awt.Image;
 public class Obstacle extends Complication {
     
     Image obstacle;
+    
     public Obstacle() {
         
         //empty constructor
