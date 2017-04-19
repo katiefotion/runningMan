@@ -31,11 +31,7 @@ public class RunningMan {
     public static void main(String[] args) {
         
         
-        //Game game = new Game(player);
-        
         GameGUI.initGameGUI(args);
-         
-        //Controller control = new Controller(game);
         
         
         

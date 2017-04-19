@@ -24,6 +24,13 @@ public class Controller {
 
     private final Game game;
     
+    ArrayList<Image> complicationsImage; 
+    static int charHeight;
+    static int charWidth;
+    
+    ArrayList<Integer> complicationsX;
+    ArrayList<Integer> complicationsY;
+    
     public Controller(Game game) {
         this.game = game;
     }
@@ -35,18 +42,23 @@ public class Controller {
         int charY = c.getY();
         
         // Access model's complications' positions and types
-        ArrayList<Integer> complicationsX = this.getComplicationsX();
-        ArrayList<Integer> complicationsY = this.getComplicationsY();
-        ArrayList<Image> complicationsImage = this.getComplicationsImage();
+        this.setComplicationsX();
+        this.setComplicationsY();
+        this.setComplicationsImage();
         
         // Set locations and images in GUI
         GameGUI.setCharacterY(charY);
         GameGUI.setComplicationsX(complicationsX);
         GameGUI.setComplicationsY(complicationsY);
         GameGUI.setComplicationsImage(complicationsImage);
+        
+        // Calculate character's height and width for collisions
+        Image characterImage = new Image("character.png");
+        charHeight = characterImage.heightProperty().intValue();
+        charWidth = characterImage.widthProperty().intValue();
     }
    
-    public void mouseClicked() {
+    public void characterJump() {
         
         // Access character in model
         Character c = this.game.getCharacter();
@@ -58,41 +70,37 @@ public class Controller {
         GameGUI.setCharacterY(c.getY());
     }
 
-    public ArrayList<Integer> getComplicationsX() {
+    public void setComplicationsX() {
         
         // Access all complications in game state
         List<Complication> comps = game.currentState().getComplications();
         
         // Make a list of all x coordinates of those complications
-        ArrayList<Integer> complicationsX = new ArrayList<>();
+        complicationsX = new ArrayList<>();
         for(Complication comp : comps) {
             complicationsX.add((Integer)comp.getX());
         }
-        
-        return complicationsX;
     } 
     
-    public ArrayList<Integer> getComplicationsY() {
+    public void setComplicationsY() {
         
         // Access all complications in game state
         List<Complication> comps = game.currentState().getComplications();
         
         // Make a list of all y coordinates of those complications
-        ArrayList<Integer> complicationsY = new ArrayList<>();
+        complicationsY = new ArrayList<>();
         for(Complication comp : comps) {
             complicationsY.add((Integer)comp.getY());
         }
-        
-        return complicationsY;
     } 
     
-    public ArrayList<Image> getComplicationsImage() {
+    public void setComplicationsImage() {
         
         // Access all complications in game state
         List<Complication> comps = game.currentState().getComplications();
         
         // Make a list of all images per complication type
-        ArrayList<Image> complicationsImage = new ArrayList<>();
+        complicationsImage = new ArrayList<>();
         
         for(Complication comp : comps) {
             
@@ -104,8 +112,6 @@ public class Controller {
             else if(comp.isThreat())
                 complicationsImage.add(new Image("threat.png"));
         }
-        
-        return complicationsImage;
     } 
     
     public void tick(int speedCoeff) {
@@ -113,8 +119,33 @@ public class Controller {
         game.currentState().tick(speedCoeff);
         
         // Increment complications' x coordinates with time 
-        ArrayList<Integer> complicationsX = this.getComplicationsX();
+        this.setComplicationsX();
         GameGUI.setComplicationsX(complicationsX);
+        
+        // Check if character and complications collid
+        boolean collision = checkCollision(game.getCharacter(), complicationsX, complicationsY, complicationsImage);
+        
+        if(collision) {
+            System.out.println("Game Over!");
+            System.exit(0);
+        }
     }
     
+    public static boolean checkCollision(Character c, ArrayList<Integer> complicationsX, ArrayList<Integer> complicationsY, ArrayList<Image> complicationsImage) {
+
+        for(int i = 0; i < complicationsX.size(); i++) {
+            
+            int compX = complicationsX.get(i);
+            int compY = complicationsY.get(i);
+            int compWidth = complicationsImage.get(i).widthProperty().intValue();
+            int compHeight = complicationsImage.get(i).heightProperty().intValue();
+            
+            if((Math.abs(c.getX() - compX) < compWidth) && (Math.abs(c.getY() - compY) < compHeight)) 
+                return true;
+        }
+        
+        return false;
+    } 
 }
+
+

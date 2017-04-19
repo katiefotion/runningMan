@@ -33,7 +33,7 @@ public class Game {
     public Game(Player player) {
         
         this.player = player;
-        this.character = new Character(100, 300);
+        this.character = new Character(100, 280);
         this.currentState = new GameState();
     }
     

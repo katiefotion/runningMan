@@ -29,6 +29,7 @@ public class GameState {
         // This is for now...
         this.complications.add(new Obstacle(800, 329));
         this.complications.add(new Pit(1200, 450));
+        this.complications.add(new Threat(2100, 290));
         
         this.currentScore = 0;
     }
