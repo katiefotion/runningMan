@@ -29,7 +29,7 @@ public class Character extends GameObject{
     }
     
     public void jump(){
-        this.setY(this.getY() - 20);
+        this.setY(this.getY() - 150);
     }
     
     public void duck() {

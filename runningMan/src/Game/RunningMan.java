@@ -4,6 +4,7 @@
  */
 package Game;
 
+import Controller.Controller;
 import Database.NetClientGet;
 import GameGUI.GameGUI;
 import GameGUI.ImagePanel;
@@ -29,14 +30,12 @@ public class RunningMan {
      */
     public static void main(String[] args) {
         
-        // TODO: Find a way to make playerId different every time
-        int playerId = 1;
-        Player player = new Player(playerId);
         
-        Game game = new Game(player);
+        //Game game = new Game(player);
         
-        GameGUI gameGUI = new GameGUI(game);
-        
+        GameGUI.initGameGUI(args);
+         
+        //Controller control = new Controller(game);
         
         
         

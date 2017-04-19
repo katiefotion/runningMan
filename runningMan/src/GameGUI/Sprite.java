@@ -33,12 +33,21 @@ public class Sprite extends JComponent {
         this.posY = y;
     }
     
+    public int getSpriteX() {
+        return this.posX;
+    }
+    
+    public int getSpriteY() {
+        return this.posY;
+    }
+    
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
         
+        super.paintComponent(g);
         doDrawing(g);
-
+        g.dispose();
+        
         Toolkit.getDefaultToolkit().sync();
     }
     

@@ -27,8 +27,8 @@ public class GameState {
         this.complications = new ArrayList();  //TODO: fix stack overflow error in complications generation
         
         // This is for now...
-        this.complications.add(new Obstacle(400, 350));
-        this.complications.add(new Pit(600, 470));
+        this.complications.add(new Obstacle(800, 329));
+        this.complications.add(new Pit(1200, 450));
         
         this.currentScore = 0;
     }
@@ -108,5 +108,12 @@ public class GameState {
             }
         }
         return threats;
+    }
+    
+    public void tick(int speedCoeff) {
+        
+        for (Complication c : complications) {
+            c.setX(c.getX() - speedCoeff);
+        }
     }
 }

@@ -1,152 +1,141 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GameGUI;
 
-import Controller.ActionListeners;
+
+import Controller.Controller;
 import Game.Game;
-import GameObjects.Complication;
-import java.awt.Canvas;
-import java.awt.Graphics;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
+import Game.Player;
+import java.util.ArrayList;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.Group;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
-/**
- *
- * @author katie
- */
-public class GameGUI extends Canvas implements Runnable{
+// An alternative implementation of Example 3,
+//    using the Timeline, KeyFrame, and Duration classes.
+
+// Animation of Earth rotating around the sun. (Hello, world!)
+public class GameGUI extends Application 
+{
+    static int characterY;
     
-    private Window window;
-    private Game game;
-    private Sprite character;
-    private Sprite obstacle;
-    private Sprite pit;
+    // Array lists for complication x location and type (denoted by image filename) 
+    static ArrayList<Integer> complicationsX;
+    static ArrayList<Integer> complicationsY;
+    static ArrayList<Image> complicationsImage;
     
-    private Thread thread;
-    private boolean running = false;
+    private int speedCoeff;
     
-    public GameGUI(Game g) {
-        
-        // Create window
-        window = new Window(800, 600, "Running Man");
-        game = g;
-        
-        try {
-            
-            // Create background of game screen
-            BufferedImage backgroundImage = ImageIO.read(new File("background.png"));
-            window.setBackgroundImage(backgroundImage);
-            
-            // Create character sprite
-            BufferedImage characterImage = ImageIO.read(new File("character.png"));
-            character = new Sprite(characterImage, 100, 300);
-            window.updateSprite(character);
-            
-            // Create obstacle sprite
-            BufferedImage obstacleImage = ImageIO.read(new File("obstacle.png"));
-            obstacle = new Sprite(obstacleImage, 400, 350);
-            window.updateSprite(obstacle);
-            
-            // Create pit sprite
-            BufferedImage pitImage = ImageIO.read(new File("pit.png"));
-            pit = new Sprite(pitImage, 600, 470);
-            window.updateSprite(pit);
-        }
-        catch(IOException e) {
-            System.out.println(e);
-        }
-        
-        // Add mouse event listener
-        JFrame frame = window.getFrame();
-        frame.addMouseListener(new ActionListeners(game, this));
-        
-        // Start running
-        this.start();
+    public static void initGameGUI(String[] args) 
+    {
+        launch(args);
     }
-    
-    public synchronized void start() {
-        thread = new Thread(this);
-        thread.start();
-        running = true;
-    }
-    
-    public synchronized void stop() {
-        try {
-            thread.join();
-            running = false;
-        }
-        
-        catch(InterruptedException e){
-            System.out.println(e);
-        }
-    }
-    
+
     @Override
-    public void run() {
+    public void start(Stage theStage) 
+    {
+        Controller control = new Controller(new Game(new Player(1)));
         
-        long lastTime = System.nanoTime();
-        double amountOfTicks = 60.0;
-        double ns = 1000000000 / amountOfTicks;
-        double delta = 0;
+        control.initialize();
         
-        while(running){
-            long now = System.nanoTime();
-            delta += (now-lastTime)/ns;
-            lastTime = now;
-            while(delta >= 1 ) {
-                tick();
-                delta--;
-            }
-            if(running) {
-                render();
-            }
-        }
-        stop();
-    }
-    
-    private void tick() {
+        theStage.setTitle( "Running Man" );
         
-        List<Complication> comps = game.currentState().getComplications();
-        for(Complication comp : comps ) {
-            comp.setX(comp.getX() - 1);
-        }
-    }
-    
-    private void render() {
+        speedCoeff = 2;
         
-        // TODO: RIGHT NOW ONLY MAKES COPIES OF SPRITES AND BASED ON 
-        // SYNTHETIC INITIALIZATION OF COMPLICATIONS
+        Group root = new Group();
+        Scene theScene = new Scene( root );
+        theStage.setScene( theScene );
         
-        // Repaint character's location based on model
-        int x = game.getCharacter().getX();
-        int y = game.getCharacter().getY();
-        character.setSpriteX(x);
-        character.setSpriteY(y);
-        window.updateSprite(character);
+        Canvas canvas = new Canvas(800, 600);
+        root.getChildren().add( canvas );
         
-        // Repaint obstacle's location based on model
-        Complication comp = game.currentState().getComplications().get(0);
-        x = comp.getX();
-        y = comp.getY();
-        obstacle.setSpriteX(x);
-        obstacle.setSpriteY(y);
-        window.updateSprite(obstacle);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
         
-        // Repaint pit's location based on model
-        comp = game.currentState().getComplications().get(1);
-        x = comp.getX(); 
-        y = comp.getY();
-        pit.setSpriteX(x);
-        pit.setSpriteY(y);
-        window.updateSprite(pit);
-    }
+        // Set background and character images
+        Image background = new Image("background.png");
+        Image character = new Image("character.png");
+        
+        Timeline gameLoop = new Timeline();
+        gameLoop.setCycleCount( Timeline.INDEFINITE );
+        
+        final long timeStart = System.currentTimeMillis();
+        
+        theScene.setOnMouseClicked(new EventHandler<MouseEvent>()
+            {
+                @Override
+                public void handle(MouseEvent e)
+                {
+                    control.mouseClicked();
+                    
+                    // Clear the canvas
+                    gc.clearRect(0, 0, 512,512);
 
+                    // background image clears canvas
+                    gc.drawImage(background, 0, 0);
+                    gc.drawImage(character, 100, characterY);
+                    
+                    for(int i = 0; i < complicationsX.size(); i++) {
+                        gc.drawImage(complicationsImage.get(i), complicationsX.get(i), complicationsY.get(i));
+                    }
+                }
+            });
+        
+        
+        KeyFrame kf = new KeyFrame(
+            Duration.seconds(0.017),                // 60 FPS
+            new EventHandler<ActionEvent>()
+            {
+                @Override
+                public void handle(ActionEvent ae)
+                {            
+                    
+                    double t = (System.currentTimeMillis() - timeStart) / 1000.0;
+                    
+                    if((t % 1000) == 0) 
+                        speedCoeff += 1;
+                    
+                    control.tick(speedCoeff);
+                    
+                    // Clear the canvas
+                    gc.clearRect(0, 0, 512,512);
+                    
+                    // background image clears canvas
+                    gc.drawImage(background, 0, 0);
+                    gc.drawImage(character, 100, characterY);
+                    
+                    for(int i = 0; i < complicationsX.size(); i++) {
+                        gc.drawImage(complicationsImage.get(i), complicationsX.get(i), complicationsY.get(i));
+                    }
+                }
+            });
+        
+        gameLoop.getKeyFrames().add( kf );
+        gameLoop.play();
+        
+        theStage.show();
+    }
+    
+    public static void setCharacterY(int y) {
+        characterY = y;
+    }
+    
+    public static void setComplicationsX(ArrayList<Integer> xs) {
+        complicationsX = xs;
+    }
+    
+    public static void setComplicationsY(ArrayList<Integer> ys) {
+        complicationsY = ys;
+    }
+    
+    public static void setComplicationsImage(ArrayList<Image> images) {
+        complicationsImage = images;
+    }
 }
