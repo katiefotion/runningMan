@@ -5,7 +5,10 @@
  */
 package Game;
 
-import Complication.*;
+import GameObjects.Pit;
+import GameObjects.Complication;
+import GameObjects.Threat;
+import GameObjects.Obstacle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +23,13 @@ public class GameState {
     
     public GameState() {
         
-        this.complications = (List<Complication>) new Complication();      //TODO: Maybe change this to call automatic generator of complications
+        //this.complications = (List<Complication>) new Complication();      
+        this.complications = new ArrayList();  //TODO: fix stack overflow error in complications generation
+        
+        // This is for now...
+        this.complications.add(new Obstacle(400, 350));
+        this.complications.add(new Pit(600, 470));
+        
         this.currentScore = 0;
     }
     

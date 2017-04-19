@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Game;
+package GameObjects;
 
 import java.awt.Graphics;
 
@@ -15,22 +15,15 @@ public abstract class GameObject {
     private int x, y;
     private int velX, velY;
     
-    public GameObject()
-    {
-        //empty consturctor
+    public GameObject() {
+        // Empty constructor class
     }
+    
     public GameObject(int x, int y){
         this.x = x;
         this.y = y;
     }
     
-    public void initObject(int x, int y, int velX, int velY)
-    {
-        this.x = x;
-        this.y = y;
-        this.velX = velX;
-        this.velY = velY;
-    }
     public abstract void tick();
     public abstract void render(Graphics g);
 

@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Game;
+package GameObjects;
 
+import GameObjects.GameObject;
 import java.awt.Graphics;
 
 /**
@@ -28,7 +29,7 @@ public class Character extends GameObject{
     }
     
     public void jump(){
-        
+        this.setY(this.getY() - 20);
     }
     
     public void duck() {

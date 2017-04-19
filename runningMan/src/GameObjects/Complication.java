@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Complication;
+package GameObjects;
 
-import Game.GameObject;
+import GameObjects.GameObject;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
@@ -23,13 +23,14 @@ public class Complication extends GameObject{
     {
         initComplication();
     }
+    
     public Complication(int x, int y) {
         super(x,y);
     }
     
     @Override
     public void tick() {
-        //TODO: have complication move to the left
+        // As of right now, the ticking is happening in GameGUI
     }
     //update every some odd seconds, grabbing location of the current character on the screen
     public void update(int x, int y) {
