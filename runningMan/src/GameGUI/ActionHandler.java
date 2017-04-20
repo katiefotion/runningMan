@@ -1,24 +1,24 @@
+/*
+ * CONTROL
+ * 
+ * Listens for user input and updates control and view accordingly 
+ * 
+ */
+
 package GameGUI;
 
-
 import Controller.Controller;
-import Game.Game;
-import Game.Player;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.stage.Stage;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -26,24 +26,25 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
-// An alternative implementation of Example 3,
-//    using the Timeline, KeyFrame, and Duration classes.
+/**
+ *
+ * @author katie
+ */
+public class ActionHandler {
 
-// Animation of Earth rotating around the sun. (Hello, world!)
-public class GameGUI extends Application 
-{
-    // Determines where the character is in the model
-    static int characterY;
+    private final Scene theScene;
+    private final Timeline gameLoop;
+    private final Controller control;
+    private final GraphicsContext gc;
+    private final Sprite character;
+    private final ArrayList<Sprite> complications;
+    private final long timeStart;
     
-    // Array lists for complication location and type (denoted by image filename) 
-    static ArrayList<Integer> complicationsX;
-    static ArrayList<Integer> complicationsY;
-    static ArrayList<Image> complicationsImage;
-    
-    // Determines how fast the complications are moving 
-    private int speedCoeff;
-    
-    // Button locations
+    // Set background and button images and locations
+    final Image background = new Image("background.png");
+    final Image quit = new Image("quit.png");
+    final Image pause = new Image("pause.png");
+    final Image play = new Image("play.png");
     final int quitX = 15;
     final int quitY = 15;
     final int pauseX = 185;
@@ -51,44 +52,21 @@ public class GameGUI extends Application
     final int playX = 260;
     final int playY = 20;
     
+    // Determines how fast the complications are moving 
+    private int speedCoeff = 2;
     
-    public static void initGameGUI(String[] args) 
-    {
-        launch(args);
+    public ActionHandler(Scene theScene, Timeline gameLoop, Controller control, GraphicsContext gc, Sprite character, ArrayList<Sprite> complications, long timeStart) {
+        this.theScene = theScene;
+        this.gameLoop = gameLoop;
+        this.control = control;
+        this.gc = gc;
+        this.character = character;
+        this.complications = complications;
+        this.timeStart = timeStart;
     }
-
-    @Override
-    public void start(Stage theStage) 
-    {
-        Controller control = new Controller(new Game(new Player(1)));
-        
-        control.initialize();
-        
-        theStage.setTitle( "Running Man" );
-        
-        speedCoeff = 2;
-        
-        Group root = new Group();
-        Scene theScene = new Scene( root );
-        theStage.setScene( theScene );
-        
-        Canvas canvas = new Canvas(800, 600);
-        root.getChildren().add( canvas );
-        
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        
-        // Set background and character images
-        Image background = new Image("background.png");
-        Image character = new Image("character.png");
-        Image quit = new Image("quit.png");
-        Image pause = new Image("pause.png");
-        Image play = new Image("play.png");
-        
-        Timeline gameLoop = new Timeline();
-        gameLoop.setCycleCount( Timeline.INDEFINITE );
-        
-        final long timeStart = System.currentTimeMillis();
-        
+    
+    public KeyFrame listen() {
+            
         theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             
             @Override
@@ -97,7 +75,7 @@ public class GameGUI extends Application
                 KeyCode key = e.getCode();
                 
                 if(key == KeyCode.SPACE && gameLoop.getStatus() == Animation.Status.RUNNING) {
-                    
+                
                     control.characterJump();
                     
                     // Clear the canvas
@@ -105,11 +83,10 @@ public class GameGUI extends Application
 
                     // background image clears canvas
                     gc.drawImage(background, 0, 0);
-                    gc.drawImage(character, 100, characterY);
                     
-                    for(int i = 0; i < complicationsX.size(); i++) {
-                        gc.drawImage(complicationsImage.get(i), complicationsX.get(i), complicationsY.get(i));
-                    }
+                    // Draw sprites
+                    character.drawSprite(gc);
+                    
                 }
             }
         });
@@ -134,7 +111,6 @@ public class GameGUI extends Application
                 }
             });
         
-        
         KeyFrame kf = new KeyFrame(
             Duration.seconds(0.017),                // 60 FPS
             new EventHandler<ActionEvent>()
@@ -155,10 +131,11 @@ public class GameGUI extends Application
                     
                     // background image clears canvas
                     gc.drawImage(background, 0, 0);
-                    gc.drawImage(character, 100, characterY);
                     
-                    for(int i = 0; i < complicationsX.size(); i++) {
-                        gc.drawImage(complicationsImage.get(i), complicationsX.get(i), complicationsY.get(i));
+                    // Draw sprites
+                    character.drawSprite(gc);
+                    for(int i = 0; i < complications.size(); i++) {
+                        complications.get(i).drawSprite(gc);
                     }
                     
                     // Draw score
@@ -179,25 +156,7 @@ public class GameGUI extends Application
                     gc.drawImage(play, playX, playY);
                 }
             });
-        gameLoop.getKeyFrames().add( kf );
-        gameLoop.play();
         
-        theStage.show();
-    }
-    
-    public static void setCharacterY(int y) {
-        characterY = y;
-    }
-    
-    public static void setComplicationsX(ArrayList<Integer> xs) {
-        complicationsX = xs;
-    }
-    
-    public static void setComplicationsY(ArrayList<Integer> ys) {
-        complicationsY = ys;
-    }
-    
-    public static void setComplicationsImage(ArrayList<Image> images) {
-        complicationsImage = images;
+        return kf;
     }
 }

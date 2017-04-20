@@ -1,20 +1,19 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * CONTROL
+ * 
+ * Mediates between the model and the view
+ * Ensures view accurately reflects model
  */
+
 package Controller;
 
 import Game.Game;
-import GameGUI.GameGUI;
+import GameGUI.GameApp;
 import GameObjects.Character;
 import GameObjects.Complication;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.input.MouseEvent;
-import javafx.application.Application;
 import javafx.scene.image.Image;
-import javafx.stage.Stage;
 
 /**
  *
@@ -35,7 +34,7 @@ public class Controller {
         this.game = game;
     }
     
-    public void initialize() {
+    public void initializeVariables() {
         
         // Access model's character position
         Character c = this.game.getCharacter();
@@ -47,10 +46,10 @@ public class Controller {
         this.setComplicationsImage();
         
         // Set locations and images in GUI
-        GameGUI.setCharacterY(charY);
-        GameGUI.setComplicationsX(complicationsX);
-        GameGUI.setComplicationsY(complicationsY);
-        GameGUI.setComplicationsImage(complicationsImage);
+        GameApp.setCharacterY(charY);
+        GameApp.setComplicationsX(complicationsX);
+        GameApp.setComplicationsY(complicationsY);
+        GameApp.setComplicationsImage(complicationsImage);
         
         // Calculate character's height and width for collisions
         Image characterImage = new Image("character.png");
@@ -67,7 +66,7 @@ public class Controller {
         c.jump();
         
         // Make GUI reflect that change
-        GameGUI.setCharacterY(c.getY());
+        GameApp.setCharacterY(c.getY());
     }
 
     public void setComplicationsX() {
@@ -120,7 +119,7 @@ public class Controller {
         
         // Increment complications' x coordinates with time 
         this.setComplicationsX();
-        GameGUI.setComplicationsX(complicationsX);
+        GameApp.updateComplicationsX(complicationsX);
         
         // Check if character and complications collid
         boolean collision = checkCollision(game.getCharacter(), complicationsX, complicationsY, complicationsImage);

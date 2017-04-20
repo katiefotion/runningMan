@@ -5,8 +5,6 @@
  */
 package GameObjects;
 
-import java.awt.Graphics;
-
 /**
  *
  * @author darrylraveche

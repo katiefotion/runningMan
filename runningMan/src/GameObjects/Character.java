@@ -5,7 +5,6 @@
  */
 package GameObjects;
 
-import GameObjects.GameObject;
 import java.awt.Graphics;
 
 /**

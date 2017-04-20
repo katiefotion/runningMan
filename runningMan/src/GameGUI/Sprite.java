@@ -1,58 +1,53 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Sprite class that describes behavior of 
+ * characters and complications in GUI 
+ *
  */
 package GameGUI;
 
-import java.awt.*;           
-import java.awt.image.BufferedImage;
-import javax.swing.*;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 /**
  *
  * @author katie
  */
-
-public class Sprite extends JComponent {
+public class Sprite {
+    
+    private int x, y;
     private Image image;
-    private int posX; 
-    private int posY;
     
-    public Sprite(BufferedImage image, int x, int y) {
-        this.image = image;
-        this.posX = x;
-        this.posY = y;
+    public Sprite() {
     }
     
-    public void setSpriteX(int x) {
-        this.posX = x;
-    }
-    
-    public void setSpriteY(int y) {
-        this.posY = y;
-    }
-    
-    public int getSpriteX() {
-        return this.posX;
-    }
-    
-    public int getSpriteY() {
-        return this.posY;
-    }
-    
-    @Override
-    protected void paintComponent(Graphics g) {
+    public Sprite(int x) {
         
-        super.paintComponent(g);
-        doDrawing(g);
-        g.dispose();
+        this.x = x;
+    }
+    
+    public Sprite(int x, Image i) {
         
-        Toolkit.getDefaultToolkit().sync();
+        this.x = x;
+        this.image = i;
     }
     
-    private void doDrawing(Graphics g) {
-        g.drawImage(image, posX, posY, this);
+    public void setX(int x) {
+        
+        this.x = x;
     }
     
+    public void setY(int y) {
+        
+        this.y = y;
+    }
+    
+    public void setImage(Image i) {
+        
+        this.image = i;
+    }
+    
+    public void drawSprite(GraphicsContext gc) {
+        
+        gc.drawImage(this.image, this.x, this.y);
+    }
 }

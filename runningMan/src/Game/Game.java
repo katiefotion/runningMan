@@ -5,20 +5,7 @@
  */
 package Game;
 
-import GameGUI.ImagePanel;
-import GameGUI.Window;
 import GameObjects.Character;
-import java.awt.image.BufferStrategy;
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javafx.scene.canvas.GraphicsContext;
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 
 /**
  *

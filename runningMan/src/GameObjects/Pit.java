@@ -5,7 +5,6 @@
  */
 package GameObjects;
 
-import java.awt.Image;
 
 /**
  *

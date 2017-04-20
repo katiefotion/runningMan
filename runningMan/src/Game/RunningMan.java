@@ -4,18 +4,8 @@
  */
 package Game;
 
-import Controller.Controller;
 import Database.NetClientGet;
-import GameGUI.GameGUI;
-import GameGUI.ImagePanel;
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
+import GameGUI.GameApp;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -31,10 +21,9 @@ public class RunningMan {
     public static void main(String[] args) {
         
         
-        GameGUI.initGameGUI(args);
+        GameApp.initGameApp(args);
         
-        
-        
+       
         //Code below generates 404
       /*try {
         System.out.println(NetClientGet.getHighScores());

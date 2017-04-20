@@ -27,9 +27,9 @@ public class GameState {
         this.complications = new ArrayList();  //TODO: fix stack overflow error in complications generation
         
         // This is for now...
-        this.complications.add(new Obstacle(800, 329));
-        this.complications.add(new Pit(1200, 450));
-        this.complications.add(new Threat(2100, 290));
+        this.complications.add(new Obstacle(1200, 329));
+        this.complications.add(new Pit(2000, 450));
+        this.complications.add(new Threat(3000, 290));
         
         this.currentScore = 0;
     }
