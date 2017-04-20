@@ -113,9 +113,9 @@ public class Controller {
         }
     } 
     
-    public void tick(int speedCoeff) {
+    public void tick(int speedCoeff, double t) {
         
-        game.currentState().tick(speedCoeff);
+        game.currentState().tick(speedCoeff, t);
         
         // Increment complications' x coordinates with time 
         this.setComplicationsX();

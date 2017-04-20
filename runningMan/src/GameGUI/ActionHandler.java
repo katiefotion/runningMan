@@ -124,7 +124,7 @@ public class ActionHandler {
                     if((t % 1000) == 0) 
                         speedCoeff += 1;
                     
-                    control.tick(speedCoeff);
+                    control.tick(speedCoeff, t);
                     
                     // Clear the canvas
                     gc.clearRect(0, 0, 512,512);
