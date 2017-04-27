@@ -116,7 +116,13 @@ public class Controller {
     public void tick(int speedCoeff, double t) {
         
         game.currentState().tick(speedCoeff, t);
-        
+        //redraws character sprite each frame
+        GameApp.setCharacterY(game.getCharacter().getY()); 
+        //System.out.println(game.getCharacter().getY());
+        //chararctr keeps going down if not on floor level
+        if(game.getCharacter().getY()<275){
+            game.getCharacter().setY(game.getCharacter().getY()+1);
+        }
         // Increment complications' x coordinates with time 
         this.setComplicationsX();
         GameApp.updateComplicationsX(complicationsX);

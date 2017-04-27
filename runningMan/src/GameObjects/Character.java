@@ -13,13 +13,16 @@ import java.awt.Graphics;
  */
 public class Character extends GameObject{
 
+    private final int GRAVITY = 15;
+    private int timer = 0;
     public Character(int x, int y) {
         super(x, y);
     }
 
     @Override
     public void tick() {
-        
+        this.setVelX(this.getX() + this.getVelX());
+        this.setVelY(this.getY() + this.getVelY());
     }
 
     @Override
