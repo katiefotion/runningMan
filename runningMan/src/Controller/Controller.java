@@ -22,6 +22,7 @@ import javafx.scene.image.Image;
 public class Controller {
 
     private final Game game;
+    private double timer = 0;
     
     ArrayList<Image> complicationsImage; 
     static int charHeight;
@@ -62,8 +63,9 @@ public class Controller {
         // Access character in model
         Character c = this.game.getCharacter();
         
-        // Make character in model jump
-        c.jump();
+        // Make character in model jump after checking if character is in the air
+        if(c.getY()>275) 
+            c.jump();
         
         // Make GUI reflect that change
         GameApp.setCharacterY(c.getY());
@@ -120,9 +122,12 @@ public class Controller {
         GameApp.setCharacterY(game.getCharacter().getY()); 
         //System.out.println(game.getCharacter().getY());
         //chararctr keeps going down if not on floor level
-        if(game.getCharacter().getY()<275){
-            game.getCharacter().setY(game.getCharacter().getY()+1);
+        if(game.getCharacter().getY()<=275){
+            timer = timer + .2;
+            game.getCharacter().setY((int) (game.getCharacter().getY()+timer));    
         }
+        else
+            timer = 0;
         // Increment complications' x coordinates with time 
         this.setComplicationsX();
         GameApp.updateComplicationsX(complicationsX);

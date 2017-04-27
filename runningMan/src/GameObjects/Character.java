@@ -13,8 +13,11 @@ import java.awt.Graphics;
  */
 public class Character extends GameObject{
 
-    private final int GRAVITY = 15;
-    private int timer = 0;
+    
+    private boolean goingUp, goingDown;
+    private int jumpHeight = 200;
+
+    
     public Character(int x, int y) {
         super(x, y);
     }
@@ -31,7 +34,7 @@ public class Character extends GameObject{
     }
     
     public void jump(){
-        this.setY(this.getY() - 150);
+        this.setY(this.getY()-jumpHeight);
     }
     
     public void duck() {
@@ -45,5 +48,19 @@ public class Character extends GameObject{
     public void moveLeft(){
         
     }
-    
+    public boolean isGoingUp() {
+        return goingUp;
+    }
+
+    public void setGoingUp(boolean goingUp) {
+        this.goingUp = goingUp;
+    }
+
+    public boolean isGoingDown() {
+        return goingDown;
+    }
+
+    public void setGoingDown(boolean goingDown) {
+        this.goingDown = goingDown;
+    }
 }
