@@ -6,6 +6,7 @@ package Game;
 
 import Database.NetClientGet;
 import GameGUI.GameApp;
+import GameGUI.Menu;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -20,9 +21,8 @@ public class RunningMan {
      */
     public static void main(String[] args) {
         
-        
+        Menu.initMenu(args);
         GameApp.initGameApp(args);
-        
        
         //Code below generates 404
       /*try {
