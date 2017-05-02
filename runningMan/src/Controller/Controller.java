@@ -115,7 +115,7 @@ public class Controller {
     
     public void tick(int speedCoeff, double t) {
         
-        game.currentState().tick(speedCoeff, t);
+        game.currentState().tick(speedCoeff, t, game.getCharacter());
         //redraws character sprite each frame
         GameApp.setCharacterY(game.getCharacter().getY()); 
         //System.out.println(game.getCharacter().getY());
@@ -145,7 +145,15 @@ public class Controller {
             int compWidth = complicationsImage.get(i).widthProperty().intValue();
             int compHeight = complicationsImage.get(i).heightProperty().intValue();
             
-            if((Math.abs(c.getX() - compX) < compWidth) && (Math.abs(c.getY() - compY) < compHeight)) 
+            String name = (complicationsImage.get(i).impl_getUrl());
+            
+            if(name.equals("file:/Users/darrylraveche/NetBeansProjects/CSC668Project/runningMan5/runningMan/build/classes/pit.png"))
+            {
+                c.setVelY(-5);
+                if((Math.abs(c.getX() - compX) < (compWidth-300)) && (Math.abs(c.getY() - compY) < 50))
+                    return true;
+            }
+            if((Math.abs(c.getX() - compX) < (compWidth)) && (Math.abs(c.getY() - compY) < compHeight)) 
                 return true;
         }
         
