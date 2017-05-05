@@ -105,6 +105,10 @@ public class GameApp extends Application
         character.setY(y);
     }
     
+    public static void setCharacterX(int x) {
+        character.setX(x);
+    }
+    
     // Set complications' x values the first time 
     public static void setComplicationsX(ArrayList<Integer> xs) {
         for (int i = 0; i < xs.size(); i++) {
