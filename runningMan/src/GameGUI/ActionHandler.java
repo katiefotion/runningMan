@@ -74,6 +74,7 @@ public class ActionHandler {
                 
                 KeyCode key = e.getCode();
                 
+                
                 if(key == KeyCode.SPACE && gameLoop.getStatus() == Animation.Status.RUNNING) {
                 
                     control.characterJump();
@@ -88,7 +89,67 @@ public class ActionHandler {
                     character.drawSprite(gc);
                     
                 }
+                
+                if(key == KeyCode.RIGHT && gameLoop.getStatus() == Animation.Status.RUNNING){
+                    control.characterMoveRight(true);
+                    
+                    // Clear the canvas
+                    gc.clearRect(0, 0, 512,512);
+
+                    // background image clears canvas
+                    gc.drawImage(background, 0, 0);
+                    
+                    // Draw sprites
+                    character.drawSprite(gc);
+                }
+                
+                if(key == KeyCode.LEFT && gameLoop.getStatus() == Animation.Status.RUNNING){
+                    control.characterMoveLeft(true);
+                    
+                    // Clear the canvas
+                    gc.clearRect(0, 0, 512,512);
+
+                    // background image clears canvas
+                    gc.drawImage(background, 0, 0);
+                    
+                    // Draw sprites
+                    character.drawSprite(gc);
+                }
             }
+        });
+        
+        theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent e) {
+                
+                KeyCode key = e.getCode();
+                
+                if(key == KeyCode.RIGHT && gameLoop.getStatus() == Animation.Status.RUNNING){
+                    
+                    control.characterMoveRight(false);
+                    // Clear the canvas
+                    gc.clearRect(0, 0, 512,512);
+
+                    // background image clears canvas
+                    gc.drawImage(background, 0, 0);
+                    
+                    // Draw sprites
+                    character.drawSprite(gc);
+                }
+                if(key == KeyCode.LEFT && gameLoop.getStatus() == Animation.Status.RUNNING){
+                    
+                    control.characterMoveLeft(false);
+                    // Clear the canvas
+                    gc.clearRect(0, 0, 512,512);
+
+                    // background image clears canvas
+                    gc.drawImage(background, 0, 0);
+                    
+                    // Draw sprites
+                    character.drawSprite(gc);
+                }
+            }
+            
         });
         
         theScene.setOnMouseClicked(new EventHandler<MouseEvent>()

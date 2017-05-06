@@ -13,13 +13,19 @@ import java.awt.Graphics;
  */
 public class Character extends GameObject{
 
+    
+    private boolean goingUp, goingDown, runningRight, runningLeft;
+    private int jumpHeight = 300;
+
+   
     public Character(int x, int y) {
         super(x, y);
     }
 
     @Override
     public void tick() {
-        
+        this.setVelX(this.getX() + this.getVelX());
+        this.setVelY(this.getY() + this.getVelY());
     }
 
     @Override
@@ -28,7 +34,7 @@ public class Character extends GameObject{
     }
     
     public void jump(){
-        this.setY(this.getY() - 150);
+        this.setY(this.getY()-jumpHeight);
     }
     
     public void duck() {
@@ -36,11 +42,49 @@ public class Character extends GameObject{
     }
     
     public void moveRight(){
-        
+        this.setX(this.getX()+3);
     }
     
     public void moveLeft(){
-        
+        this.setX(this.getX()-3);
+    }
+    public boolean isGoingUp() {
+        return goingUp;
+    }
+
+    public void setGoingUp(boolean goingUp) {
+        this.goingUp = goingUp;
+    }
+
+    public boolean isGoingDown() {
+        return goingDown;
+    }
+
+    public void setGoingDown(boolean goingDown) {
+        this.goingDown = goingDown;
     }
     
+    public int getJumpHeight() {
+        return jumpHeight;
+    }
+
+    public void setJumpHeight(int jumpHeight) {
+        this.jumpHeight = jumpHeight;
+    }
+    
+    public boolean isRunningRight() {
+        return runningRight;
+    }
+
+    public void setRunningRight(boolean runningRight) {
+        this.runningRight = runningRight;
+    }
+
+    public boolean isRunningLeft() {
+        return runningLeft;
+    }
+
+    public void setRunningLeft(boolean runningLeft) {
+        this.runningLeft = runningLeft;
+    }
 }

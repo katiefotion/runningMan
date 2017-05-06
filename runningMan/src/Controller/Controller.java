@@ -22,6 +22,9 @@ import javafx.scene.image.Image;
 public class Controller {
 
     private final Game game;
+    private double timer1 = 4;
+    private double timer2 = 0;
+    private Character c;
     
     ArrayList<Image> complicationsImage; 
     static int charHeight;
@@ -37,7 +40,7 @@ public class Controller {
     public void initializeVariables() {
         
         // Access model's character position
-        Character c = this.game.getCharacter();
+        c = this.game.getCharacter();
         int charY = c.getY();
         
         // Access model's complications' positions and types
@@ -60,14 +63,36 @@ public class Controller {
     public void characterJump() {
         
         // Access character in model
-        Character c = this.game.getCharacter();
         
-        // Make character in model jump
-        c.jump();
+        
+        // Make character in model jump after checking if character is in the air
+        if(c.getY()>=275){
+            //System.out.println("going up");
+            c.setGoingUp(true);
+        }   
         
         // Make GUI reflect that change
         GameApp.setCharacterY(c.getY());
     }
+    
+    public void characterMoveRight(boolean b) {
+        
+        
+        c.setRunningRight(b);
+        
+        // Make GUI reflect that change
+        GameApp.setCharacterX(c.getX());
+    }
+    
+    public void characterMoveLeft(boolean b) {
+        
+        
+        c.setRunningLeft(b);
+        
+        // Make GUI reflect that change
+        GameApp.setCharacterX(c.getX());
+    }
+    
 
     public void setComplicationsX() {
         
@@ -116,18 +141,60 @@ public class Controller {
     public void tick(int speedCoeff, double t) {
         
         game.currentState().tick(speedCoeff, t);
+        //redraws character sprite each frame
+        GameApp.setCharacterY(c.getY()); 
+        GameApp.setCharacterX(c.getX());
+        //System.out.println(game.getCharacter().getY());
+        //chararctr keeps going down if not on floor level
+        //if(game.getCharacter().getY()<=275){
+        //    timer = timer + .2;
+        //    game.getCharacter().setY((int) (game.getCharacter().getY()+timer));    
+        //}
+        //else
+        //    timer = 0;
+        if(c.isGoingUp() && c.getY()>=275-c.getJumpHeight()){
+            //System.out.println("going up initiation");
+            timer1 = timer1 - .2;
+            //System.out.println(timer);
+            c.setY((int) (c.getY() - timer1));
+        }
+        else
+            timer1 =12;
+        if(c.getY()<280-c.getJumpHeight()){
+            //System.out.println("not going up");
+            c.setGoingUp(false);
+            //System.out.println("going down");
+            c.setGoingDown(true);
+        }
+        if(c.isGoingDown() && c.getY()<275){
+            timer2 = timer2 + .2;
+            c.setY((int) (c.getY() + timer2));
+        }
+        else
+            timer2 = 0;
+        if(c.getY()>275){
+            c.setGoingDown(false);
+        }
+        if(c.isRunningRight()){
+            c.moveRight();
+        }
         
+        if(c.isRunningLeft()){
+            c.moveLeft();
+        }
+            
         // Increment complications' x coordinates with time 
         this.setComplicationsX();
         GameApp.updateComplicationsX(complicationsX);
         
         // Check if character and complications collid
-        boolean collision = checkCollision(game.getCharacter(), complicationsX, complicationsY, complicationsImage);
+        boolean collision = checkCollision(c, complicationsX, complicationsY, complicationsImage);
         
         if(collision) {
             System.out.println("Game Over!");
             System.exit(0);
         }
+        
     }
     
     public static boolean checkCollision(Character c, ArrayList<Integer> complicationsX, ArrayList<Integer> complicationsY, ArrayList<Image> complicationsImage) {
