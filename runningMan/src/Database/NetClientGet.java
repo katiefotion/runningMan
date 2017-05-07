@@ -30,7 +30,7 @@ public class NetClientGet {
             /*
              GET
              */
-            URL urlHighScores = new URL("http://localhost:8080/RunningManServer/webresources/com.highscoresentity.highscores");
+            URL urlHighScores = new URL("http://localhost:8080/RunningManServer/webresources/com.entity.highscoresentity.highscores");
             HttpURLConnection getConnHighScores = (HttpURLConnection) urlHighScores.openConnection();
             getConnHighScores.setRequestMethod("GET");
             getConnHighScores.setRequestProperty("Accept", "application/xml");
@@ -90,7 +90,7 @@ public class NetClientGet {
             /*
              POST
              */
-            URL urlSale = new URL("http://localhost:8080/RunningManServer/webresources/com.highscoresentity.highscores");
+            URL urlSale = new URL("http://localhost:8080/RunningManServer/webresources/com.entity.highscoresentity.highscores");
 
             HttpURLConnection postConnHighScore = (HttpURLConnection) urlSale.openConnection();
 
