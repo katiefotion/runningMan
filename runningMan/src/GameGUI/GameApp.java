@@ -8,6 +8,7 @@ package GameGUI;
 import Controller.Controller;
 import Game.Game;
 import Game.Player;
+import GameGUI.Menu.MenuEventListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
@@ -48,11 +49,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
-public class GameApp extends Application {
-
-  private final int MENU_PADDING = 4;
-  private final int MENU_BUTTON_WIDTH = 256;
-  private final int MENU_BUTTON_HEIGHT = 128;
+public class GameApp extends Application implements
+        Menu.MenuEventListener {
 
   private final int GAME_WIDTH = 800;
   private final int GAME_HEIGHT = 600;
@@ -71,12 +69,7 @@ public class GameApp extends Application {
 
   private Scene gameScene;
   private Stage theStage;
-
-  //menu stuff
-  ImageView startImage;
-  ImageView highscoresImage;
-  ImageView quitImage;
-  Image backgroundImage;
+  private Menu menu;
 
   // Launch application
   public static void initGameApp(String[] args) {
@@ -86,11 +79,13 @@ public class GameApp extends Application {
   @Override
   public void start(Stage theStage) {
     this.theStage = theStage;
-    gameScene = new Scene(new Group(), GAME_WIDTH, GAME_HEIGHT);
+    this.theStage.setTitle("Running Man");
+    
+    this.gameScene = new Scene(new Group(), GAME_WIDTH, GAME_HEIGHT);
     this.theStage.setScene(gameScene);
-
-    showMenu();
-    initMenuButtonListeners();
+    
+    menu = new Menu(this);
+    menu.showMenu(theStage);
   }
 
   // Set character's y value based on current model
@@ -130,56 +125,9 @@ public class GameApp extends Application {
     }
   }
 
-  private void showMenu() {
-    try {
-      BorderPane menuLayout = new BorderPane();
-      VBox buttonLayout = new VBox(MENU_PADDING);
-
-      startImage = new ImageView(new Image(new FileInputStream("src/start_button.png")));
-      highscoresImage = new ImageView(new Image(new FileInputStream("src/highscores_button.png")));
-      quitImage = new ImageView(new Image(new FileInputStream("src/quit_button.png")));
-      backgroundImage = new Image("background.png");
-
-      startImage.setFitWidth(MENU_BUTTON_WIDTH);
-      startImage.setFitHeight(MENU_BUTTON_HEIGHT);
-
-      highscoresImage.setFitWidth(MENU_BUTTON_WIDTH);
-      highscoresImage.setFitHeight(MENU_BUTTON_HEIGHT);
-
-      quitImage.setFitWidth(MENU_BUTTON_WIDTH);
-      quitImage.setFitHeight(MENU_BUTTON_HEIGHT);
-
-      buttonLayout.getChildren().addAll(startImage, highscoresImage, quitImage);
-      buttonLayout.setAlignment(Pos.CENTER);
-      menuLayout.setCenter(buttonLayout);
-
-      menuLayout.setBackground(new Background(
-              new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                      BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-
-      gameScene.setRoot(menuLayout); 
-      theStage.show();
-    } catch (FileNotFoundException ex) {
-      Logger.getLogger(GameApp.class.getName()).log(Level.SEVERE, null, ex);
-    }
-  }
-
-  private void initMenuButtonListeners() {
-    if (startImage != null) {
-      startImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent event) {
-          startGame();
-        }
-      });
-    }
-  }
-
   public void startGame() {
     // Start controller to mediate between model and view
     Controller control = new Controller(new Game(new Player(1)));
-
-    theStage.setTitle("Running Man");    // Set screen title
 
     // Initialize empty character and complication structures
     character = new Sprite(100, new Image("character.png"));
@@ -190,20 +138,12 @@ public class GameApp extends Application {
     control.initializeVariables();
 
     Group root = new Group();
-    //gameScene = new Scene(root);
     gameScene.setRoot(root);
-    //theStage.setScene(gameScene);
 
     Canvas canvas = new Canvas(GAME_WIDTH, GAME_HEIGHT);
     root.getChildren().add(canvas);
 
     GraphicsContext gc = canvas.getGraphicsContext2D();
-
-    // Set background and button images
-    Image background = new Image("background.png");
-    Image quit = new Image("quit.png");
-    Image pause = new Image("pause.png");
-    Image play = new Image("play.png");
 
     // Start timer
     Timeline gameLoop = new Timeline();
@@ -218,5 +158,20 @@ public class GameApp extends Application {
 
     // Display the scene
     theStage.show();
+  }
+
+  @Override
+  public void onStartGameSelected() {
+    startGame();
+  }
+
+  @Override
+  public void onHighScoresSelected() {
+    //TODO: fix rest server and make a call to display a new scene with the high scores
+  }
+
+  @Override
+  public void onQuitSelected() {
+    theStage.close();
   }
 }
