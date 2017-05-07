@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.highscoresentity;
+package com.entity.highscoresentity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -107,7 +107,7 @@ public class Highscores implements Serializable {
 
   @Override
   public String toString() {
-    return "com.highscoresentity.Highscores[ hid=" + hid + " ]";
+    return "com.entity.highscoresentity.Highscores[ hid=" + hid + " ]";
   }
   
 }

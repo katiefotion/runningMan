@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.highscoresentity.service;
+package com.entity.highscoresentity.service;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
@@ -29,7 +29,7 @@ public class ApplicationConfig extends Application {
    * If required, comment out calling this method in getClasses().
    */
   private void addRestResourceClasses(Set<Class<?>> resources) {
-    resources.add(com.highscoresentity.service.HighscoresFacadeREST.class);
+    resources.add(com.entity.highscoresentity.service.HighscoresFacadeREST.class);
   }
   
 }

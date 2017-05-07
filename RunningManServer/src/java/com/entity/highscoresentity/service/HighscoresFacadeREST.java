@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.highscoresentity.service;
+package com.entity.highscoresentity.service;
 
-import com.highscoresentity.Highscores;
+import com.entity.highscoresentity.Highscores;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -24,7 +24,7 @@ import javax.ws.rs.Produces;
  * @author Flex
  */
 @Stateless
-@Path("com.highscoresentity.highscores")
+@Path("com.entity.highscoresentity.highscores")
 public class HighscoresFacadeREST extends AbstractFacade<Highscores> {
   @PersistenceContext(unitName = "RunningManServerPU")
   private EntityManager em;
