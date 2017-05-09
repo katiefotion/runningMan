@@ -140,7 +140,7 @@ public class Controller {
     
     public void tick(int speedCoeff, double t) {
         
-        game.currentState().tick(speedCoeff, t);
+        game.currentState().tick(speedCoeff, t,c.getX());
         //redraws character sprite each frame
         GameApp.setCharacterY(c.getY()); 
         GameApp.setCharacterX(c.getX());
@@ -206,9 +206,20 @@ public class Controller {
             int compWidth = complicationsImage.get(i).widthProperty().intValue();
             int compHeight = complicationsImage.get(i).heightProperty().intValue();
             
-            if((Math.abs(c.getX() - compX) < compWidth) && (Math.abs(c.getY() - compY) < compHeight)) 
+           
+             System.out.println(compY);
+             System.out.println("Char: " + c.getY());
+            
+            if(compY == 450)
+            {
+                //c.setVelY(15);
+                if((Math.abs(c.getX() - compX) < (compWidth-250)) && (Math.abs((c.getY()+450) - compY) > 270))
+                    return true;
+            }
+            if((Math.abs(c.getX() - compX) < (compWidth)) && (Math.abs(c.getY() - compY) < compHeight)) 
                 return true;
         }
+        
         
         return false;
     } 

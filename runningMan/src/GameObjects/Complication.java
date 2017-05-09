@@ -5,8 +5,10 @@
  */
 package GameObjects;
 
+import Game.GameState;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -15,12 +17,16 @@ import java.util.Random;
  */
 public class Complication extends GameObject{
     
-    Random rand = new Random();
-    private int compChoice;
+    static Random rand = new Random();
+    private static int compChoice;
     
     public Complication()
     {
-        initComplication();
+        //empty constructor class
+    }
+    public Complication(GameState g)
+    {
+        initComplication(g);
     }
     
     public Complication(int x, int y) {
@@ -30,28 +36,6 @@ public class Complication extends GameObject{
     @Override
     public void tick() {
         // As of right now, the ticking is happening in GameGUI
-    }
-    //update every some odd seconds, grabbing location of the current character on the screen
-    public void update(int x, int y) {
-        
-        compChoice = rand.nextInt(3); // produces a random number to spawn a certain obstacle
-        
-        switch (compChoice)
-        {
-            case 0: //produces an obstacle
-                new Obstacle(x,y);//call obstacle class to instantiate an obstacle
-                break;
-            case 1: //produces a pit
-                new Pit(x,y);//call put class to instatitate a pit
-                break;
-            case 2: //produces a threat
-                new Threat(x,y);//call threat class to instatitate a threat
-                break;
-            default: 
-                //do nothing, continue on.
-                break;
-        }
-        
     }
 
     @Override
@@ -77,26 +61,32 @@ public class Complication extends GameObject{
         }
     }
     
-    private void initComplication()//used to initialize a complication at the start of the game
+    public static void initComplication(GameState g)//used to initialize a complication at the start of the game
     {
-        
+        ArrayList<Complication> state =  new ArrayList();
         compChoice = rand.nextInt(3); // produces a random number to spawn a certain obstacle
-        
+        //System.out.println("CompChoice: " + compChoice);
         switch (compChoice)
         {
             case 0: //produces an obstacle
-                new Obstacle(400,0);//call obstacle class to instantiate an obstacle
+                Obstacle o = new Obstacle(900,329);//call obstacle class to instantiate an obstacle
+                state.add(o);
                 break;
             case 1: //produces a pit
-                new Pit(400,0);//call put class to instatitate a pit
+                Pit p = new Pit(900,450);//call put class to instatitate a pit
+                state.add(p);
                 break;
             case 2: //produces a threat
-                new Threat(400,0);//call threat class to instatitate a threat
+                Threat t = new Threat(900,300);//call threat class to instatitate a threat
+                state.add(t);
                 break;
             default: 
+                System.out.println("Error here.");
                 //do nothing, continue on.
                 break;
         }
+        g.setNewComplications(state);//add the new arrayList to gameState
+        
         
     }
     // Overriden by subclasses where appropriate
