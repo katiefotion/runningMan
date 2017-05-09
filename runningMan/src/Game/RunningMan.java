@@ -34,5 +34,4 @@ public class RunningMan {
       */
       GameApp.initGameApp(args);
     }
-    
 }

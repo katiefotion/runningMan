@@ -1,0 +1,31 @@
+Tue May 09 15:11:13 PDT 2017 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
+----------------------------------------------------------------
+Tue May 09 15:11:14 PDT 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-015b-ef44-2961-ffffd7011a41 
+on database directory C:\Users\Flex\Documents\NetBeansProjects\Final Project\runningMan\runningMan\RunningMan with class loader sun.misc.Launcher$AppClassLoader@60e53b93 
+Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_51/db/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_51-b16
+user.dir=C:\Program Files\Java\jdk1.8.0_51\db
+os.name=Windows 7
+os.arch=amd64
+os.version=6.1
+derby.system.home=C:\Users\Flex\Documents\NetBeansProjects\Final Project\runningMan\runningMan
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Tue May 09 15:11:23 PDT 2017:
+Shutting down instance a816c00e-015b-ef44-2961-ffffd7011a41 on database directory C:\Users\Flex\Documents\NetBeansProjects\Final Project\runningMan\runningMan\RunningMan with class loader sun.misc.Launcher$AppClassLoader@60e53b93 
+Tue May 09 15:11:23 PDT 2017 Thread[DRDAConnThread_2,5,main] (DATABASE = RunningMan), (DRDAID = {2}), Database 'RunningMan' shutdown.
+----------------------------------------------------------------
+Tue May 09 15:11:30 PDT 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a65c80ac-015b-ef44-2961-ffffd7011a41 
+on database directory C:\Users\Flex\Documents\NetBeansProjects\Final Project\runningMan\runningMan\RunningMan with class loader sun.misc.Launcher$AppClassLoader@60e53b93 
+Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_51/db/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_51-b16
+user.dir=C:\Program Files\Java\jdk1.8.0_51\db
+os.name=Windows 7
+os.arch=amd64
+os.version=6.1
+derby.system.home=C:\Users\Flex\Documents\NetBeansProjects\Final Project\runningMan\runningMan
+Database Class Loader started - derby.database.classpath=''
