@@ -10,7 +10,7 @@ package Controller;
 import Game.Game;
 import GameGUI.GameApp;
 import GameObjects.Character;
-import GameObjects.Complication;
+import GameObjects.*;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.image.Image;
@@ -70,7 +70,14 @@ public class Controller {
         // Make GUI reflect that change
         GameApp.setCharacterY(c.getY());
     }
-
+    
+    public void characterShoot(){
+        Missile m = new Missile(this.game.getCharacter().getX(), this.game.getCharacter().getY());
+        this.game.currentState().addMissile(m);
+        System.out.println(this.game.getCharacter().getY());
+        System.out.println(m.getY());
+    }
+    
     public void setComplicationsX() {
         
         // Access all complications in game state
@@ -119,7 +126,9 @@ public class Controller {
         
         game.currentState().tick(speedCoeff, t);
         //redraws character sprite each frame
-        GameApp.setCharacterY(game.getCharacter().getY()); 
+        GameApp.setCharacterY(game.getCharacter().getY());
+        if(this.game.currentState().containsMissile())
+            GameApp.setMissileX(game.currentState().getMissileX());
         //System.out.println(game.getCharacter().getY());
         //chararctr keeps going down if not on floor level
         if(game.getCharacter().getY()<=275){
@@ -156,6 +165,9 @@ public class Controller {
         
         return false;
     } 
+    public boolean checkMissile(){
+        return this.game.currentState().containsMissile();
+    }
 }
 
 

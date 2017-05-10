@@ -21,7 +21,7 @@ public class RunningMan {
      */
     public static void main(String[] args) {
         
-        Menu.initMenu(args);
+        //Menu.initMenu(args);
         GameApp.initGameApp(args);
        
         //Code below generates 404

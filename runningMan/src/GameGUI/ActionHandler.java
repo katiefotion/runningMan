@@ -8,6 +8,7 @@
 package GameGUI;
 
 import Controller.Controller;
+import Game.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class ActionHandler {
     private final Timeline gameLoop;
     private final Controller control;
     private final GraphicsContext gc;
-    private final Sprite character;
+    private final Sprite character, missile;
     private final ArrayList<Sprite> complications;
     private final long timeStart;
     
@@ -55,7 +56,7 @@ public class ActionHandler {
     // Determines how fast the complications are moving 
     private int speedCoeff = 2;
     
-    public ActionHandler(Scene theScene, Timeline gameLoop, Controller control, GraphicsContext gc, Sprite character, ArrayList<Sprite> complications, long timeStart) {
+    public ActionHandler(Scene theScene, Timeline gameLoop, Controller control, GraphicsContext gc, Sprite character, Sprite missile, ArrayList<Sprite> complications, long timeStart) {
         this.theScene = theScene;
         this.gameLoop = gameLoop;
         this.control = control;
@@ -63,6 +64,7 @@ public class ActionHandler {
         this.character = character;
         this.complications = complications;
         this.timeStart = timeStart;
+        this.missile = missile;
     }
     
     public KeyFrame listen() {
@@ -87,6 +89,10 @@ public class ActionHandler {
                     // Draw sprites
                     character.drawSprite(gc);
                     
+                }
+                
+                if(key == KeyCode.K && gameLoop.getStatus() == Animation.Status.RUNNING){
+                    control.characterShoot();
                 }
             }
         });
@@ -154,6 +160,10 @@ public class ActionHandler {
                     
                     // Draw play button
                     gc.drawImage(play, playX, playY);
+                    
+                    if(control.checkMissile()){
+                        missile.drawSprite(gc);
+                    }
                 }
             });
         

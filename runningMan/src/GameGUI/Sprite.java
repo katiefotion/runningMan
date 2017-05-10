@@ -47,7 +47,6 @@ public class Sprite {
     }
     
     public void drawSprite(GraphicsContext gc) {
-        
         gc.drawImage(this.image, this.x, this.y);
     }
 }

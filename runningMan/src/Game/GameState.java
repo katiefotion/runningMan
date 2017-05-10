@@ -6,10 +6,7 @@
  */
 package Game;
 
-import GameObjects.Pit;
-import GameObjects.Complication;
-import GameObjects.Threat;
-import GameObjects.Obstacle;
+import GameObjects.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +18,7 @@ public class GameState {
     
     private int currentScore;
     private List<Complication> complications;
-    
+    private Missile m;
     public GameState() {
         
         //this.complications = (List<Complication>) new Complication();      
@@ -31,10 +28,19 @@ public class GameState {
         this.complications.add(new Obstacle(1200, 329));
         this.complications.add(new Pit(2000, 450));
         this.complications.add(new Threat(3000, 290));
-        
+        this.m = null;
         this.currentScore = 0;
     }
     
+    public boolean containsMissile(){
+        if(this.m == null){
+            return false;
+        }
+        return true;
+    }
+    public void addMissile(Missile m){
+        this.m = m;
+    }
     // Sets current score to "amount" more than previous score
     public void incrementScore(int amount) {
         
@@ -117,5 +123,12 @@ public class GameState {
         for (Complication c : complications) {
             c.setX(c.getX() - speedCoeff);
         }
+        if(this.containsMissile()){
+            m.tick();
+        }
+    }
+    
+    public int getMissileX(){
+        return m.getX();
     }
 }

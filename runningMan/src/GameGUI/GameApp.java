@@ -36,7 +36,7 @@ import javafx.util.Duration;
 public class GameApp extends Application 
 {   
     // Tracks known characters and complications
-    static Sprite character;
+    static Sprite character, missile;
     static ArrayList<Sprite> complications;
     
     // Button locations
@@ -62,7 +62,7 @@ public class GameApp extends Application
         // Initialize empty character and complication structures
         character = new Sprite(100, new Image("character.png"));
         complications = new ArrayList<>();
-                
+        missile = new Sprite(100, new Image("missile.png"));        
         // Fill character and complication structures with relevant info
         // based on model
         control.initializeVariables();
@@ -91,7 +91,7 @@ public class GameApp extends Application
         final long timeStart = System.currentTimeMillis();
         
         // Listen for user input continuously 
-        ActionHandler ah = new ActionHandler(theScene, gameLoop, control, gc, character, complications, timeStart);
+        ActionHandler ah = new ActionHandler(theScene, gameLoop, control, gc, character, missile, complications, timeStart);
         KeyFrame kf = ah.listen();
         gameLoop.getKeyFrames().add( kf );
         gameLoop.play();
@@ -105,6 +105,9 @@ public class GameApp extends Application
         character.setY(y);
     }
     
+    public static void setMissileX(int x) {
+        missile.setX(x);
+    }
     // Set complications' x values the first time 
     public static void setComplicationsX(ArrayList<Integer> xs) {
         for (int i = 0; i < xs.size(); i++) {
