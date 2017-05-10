@@ -140,7 +140,17 @@ public class Controller {
     
     public void tick(int speedCoeff, double t) {
         
-        game.currentState().tick(speedCoeff, t,c.getX());
+        boolean shiftedImage = game.currentState().tick(speedCoeff, t,c.getX());
+        
+        if(shiftedImage) {
+            ArrayList<Image> compImageTemp = new ArrayList<>();
+            for(int i = 1; i < complicationsImage.size(); i++) {
+                compImageTemp.add(complicationsImage.get(i));
+            }
+            
+            complicationsImage = compImageTemp;
+        }
+        
         //redraws character sprite each frame
         GameApp.setCharacterY(c.getY()); 
         GameApp.setCharacterX(c.getX());
@@ -183,9 +193,12 @@ public class Controller {
             c.moveLeft();
         }
             
-        // Increment complications' x coordinates with time 
+        // Increment complications' x coordinates with time  
+        // (and y coordinates in case new complication is created)
         this.setComplicationsX();
-        GameApp.updateComplicationsX(complicationsX);
+        this.setComplicationsY();
+        this.setComplicationsImage();
+        GameApp.updateComplicationsX(complicationsX, complicationsY, complicationsImage);
         
         // Check if character and complications collid
         boolean collision = checkCollision(c, complicationsX, complicationsY, complicationsImage);
@@ -207,8 +220,8 @@ public class Controller {
             int compHeight = complicationsImage.get(i).heightProperty().intValue();
             
            
-             System.out.println(compY);
-             System.out.println("Char: " + c.getY());
+            // System.out.println(compY);
+            // System.out.println("Char: " + c.getY());
             
             if(compY == 450)
             {

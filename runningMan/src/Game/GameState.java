@@ -115,25 +115,29 @@ public class GameState {
         return threats;
     }
     
-    public void tick(int speedCoeff, double t, int ch) {
+    public boolean tick(int speedCoeff, double t, int ch) {
         
         for (Complication c : complications) {
             c.setX(c.getX() - speedCoeff);
         }
-        int x_int = (int)t;
+        
         //System.out.println("TIme now: S" + t);
         //System.out.println("TIme mod 12: S" + ((int)t)%12);
-        if((int)t%12 == 0 && t > 1)
+        if((int)(t*100)%600 == 0 && t > 1)
         {
             System.out.println("******* ADDING NEW COMPLICATION ********" + t);
-            this.update(ch);
-            //spawn_flag = false;
+            boolean shiftedImage = this.update(ch);
+            
+            return shiftedImage;
         }
+        
+        return false;
     }
     
         //update every some odd seconds, grabbing location of the current character on the screen
-    public void update(int x) {
+    public boolean update(int x) {
         
+        // Add new complication 
         Random rand = new Random();
         ArrayList state = (ArrayList) this.getComplications();
         int compChoice = rand.nextInt(3); // produces a random number to spawn a certain obstacle
@@ -142,15 +146,15 @@ public class GameState {
         {
             //TODO: set y to respective y-coords (image)
             case 0: //produces an obstacle
-                Obstacle o = new Obstacle(x+500, 329);//call obstacle class to instantiate an obstacle
+                Obstacle o = new Obstacle(x+800, 329);//call obstacle class to instantiate an obstacle
                 state.add(o);
                 break;
             case 1: //produces a pit
-                Pit p = new Pit(x+500, 450);//call put class to instatitate a pit
+                Pit p = new Pit(x+800, 450);//call put class to instatitate a pit
                 state.add(p);
                 break;
             case 2: //produces a threat
-                Threat t = new Threat(x+500,300);//call threat class to instatitate a threat
+                Threat t = new Threat(x+800,300);//call threat class to instatitate a threat
                 state.add(t);
                 break;
             default: 
@@ -159,6 +163,20 @@ public class GameState {
                 break;
         }
         this.setNewComplications(state);//add the new arrayList to gameState
-           
+        
+        // Then delete first element of Array List if too long to improve runtime 
+        if(complications.size() > 3) {
+            List<Complication> comp_temp = new ArrayList<>();
+            
+            for(int i = 1; i < complications.size(); i++) {
+                comp_temp.add(complications.get(i));
+            }
+            
+            complications = comp_temp;
+            
+            return true;
+        } 
+        
+        return false;
     }
 }

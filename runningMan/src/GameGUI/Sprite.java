@@ -31,6 +31,13 @@ public class Sprite {
         this.image = i;
     }
     
+    public Sprite(int x, int y, Image i) {
+        
+        this.x = x;
+        this.y = y;
+        this.image = i;
+    }
+    
     public void setX(int x) {
         
         this.x = x;

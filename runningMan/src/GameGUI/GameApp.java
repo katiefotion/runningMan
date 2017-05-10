@@ -5,6 +5,7 @@
  */
 package GameGUI;
 
+import MenuGUI.Menu;
 import Controller.Controller;
 import Game.Game;
 import Game.Player;
@@ -75,9 +76,18 @@ public class GameApp extends Application implements
   }
 
   // Update complications' x values based on current model
-  public static void updateComplicationsX(ArrayList<Integer> xs) {
+  public static void updateComplicationsX(ArrayList<Integer> xs, ArrayList<Integer> ys, ArrayList<Image> images) {
+    if(xs.size() > complications.size()) {
+        complications.add(new Sprite(xs.get(xs.size()-1), ys.get(ys.size()-1), images.get(images.size()-1)));
+    }
     for (int i = 0; i < xs.size(); i++) {
-      complications.get(i).setX(xs.get(i));
+        complications.get(i).setX(xs.get(i));
+    }
+    for(int i = 0; i < ys.size(); i++) {
+        complications.get(i).setY(ys.get(i));
+    }
+    for(int i = 0; i < images.size(); i++) {
+        complications.get(i).setImage(images.get(i));
     }
   }
 
