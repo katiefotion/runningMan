@@ -67,6 +67,33 @@ public class GameApp extends Application implements
   public static void setCharacterX(int x) {
     character.setX(x);
   }
+  public static void setStillCharacter(){
+        character.setImage(new Image("character_1.png"));
+    }
+  public static void animateCharacter(int x){
+    switch(x){
+        case 0:
+            character.setImage(new Image("character_1.png"));
+            break;
+        case 1:
+            character.setImage(new Image("character_2.png"));
+            break;
+        case 2:
+            character.setImage(new Image("character_3.png"));
+            break;
+        case 3:
+            character.setImage(new Image("character_4.png"));
+            break;
+        case 4:
+            character.setImage(new Image("character_5.png"));
+            break;
+        case 5:
+            character.setImage(new Image("character_6.png"));
+            break;
+        default:
+            break;
+    }
+}
   
   public static void setMissileX(int x) {
       missile.setX(x);
