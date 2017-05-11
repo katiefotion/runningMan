@@ -140,7 +140,7 @@ public class GameApp extends Application implements
     final long timeStart = System.currentTimeMillis();
 
     // Listen for user input continuously 
-    ActionHandler ah = new ActionHandler(gameScene, gameLoop, control, gc, character, missile, complications, timeStart);
+    ActionHandler ah = new ActionHandler(theStage, menu, gameLoop, control, gc, character, missile, complications, timeStart);
     KeyFrame kf = ah.listen();
     gameLoop.getKeyFrames().add(kf);
     gameLoop.play();
