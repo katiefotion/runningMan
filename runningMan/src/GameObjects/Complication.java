@@ -73,7 +73,7 @@ public class Complication extends GameObject{
                 state.add(o);
                 break;
             case 1: //produces a pit
-                Pit p = new Pit(900,450);//call put class to instatitate a pit
+                Pit p = new Pit(900,445);//call put class to instatitate a pit
                 state.add(p);
                 break;
             case 2: //produces a threat

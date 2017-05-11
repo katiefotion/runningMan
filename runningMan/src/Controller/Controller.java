@@ -223,13 +223,13 @@ public class Controller {
             // System.out.println(compY);
             // System.out.println("Char: " + c.getY());
             
-            if(compY == 450)
+            if(compY == 445)
             {
                 //c.setVelY(15);
-                if((Math.abs(c.getX() - compX) < (compWidth-250)) && (Math.abs((c.getY()+450) - compY) > 270))
+                if((Math.abs(c.getX() - compX) < (compWidth-280)) && (Math.abs((c.getY()+445) - compY) > 280))
                     return true;
             }
-            if((Math.abs(c.getX() - compX) < (compWidth)) && (Math.abs(c.getY() - compY) < compHeight)) 
+            if((Math.abs(c.getX() - (compX)) < (compWidth-15)) && (Math.abs(c.getY() - compY) < compHeight)) 
                 return true;
         }
         

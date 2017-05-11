@@ -146,18 +146,20 @@ public class GameState {
         {
             //TODO: set y to respective y-coords (image)
             case 0: //produces an obstacle
-                Obstacle o = new Obstacle(x+800, 329);//call obstacle class to instantiate an obstacle
+                Obstacle o = new Obstacle(x+600, 329);//call obstacle class to instantiate an obstacle
                 state.add(o);
                 break;
             case 1: //produces a pit
-                Pit p = new Pit(x+800, 450);//call put class to instatitate a pit
+                Pit p = new Pit(x+600, 445);//call put class to instatitate a pit
                 state.add(p);
                 break;
             case 2: //produces a threat
-                Threat t = new Threat(x+800,300);//call threat class to instatitate a threat
+                Threat t = new Threat(x+600,300);//call threat class to instatitate a threat
                 state.add(t);
                 break;
             default: 
+                Obstacle d = new Obstacle(x+600, 329);//call obstacle class to instantiate an obstacle
+                state.add(d);
                 System.out.println("Error here.");
                 //do nothing, continue on.
                 break;
