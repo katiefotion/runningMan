@@ -19,6 +19,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -41,9 +42,10 @@ public class GameApp extends Application implements
     final int playX = 260;
     final int playY = 20;
 
-    private Scene gameScene;
-    private Stage theStage;
+    private static Scene gameScene;
+    private static Stage theStage;
     private Menu menu;
+    private static Timeline gameLoop;
 
     // Launch application
     public static void initGameApp(String[] args) {
@@ -138,7 +140,7 @@ public class GameApp extends Application implements
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         // Start timer
-        Timeline gameLoop = new Timeline();
+        gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
         final long timeStart = System.currentTimeMillis();
 
@@ -149,6 +151,13 @@ public class GameApp extends Application implements
         gameLoop.play();
 
         // Display the scene
+        theStage.show();
+    }
+
+    public static void onEndGame(Parent root) {
+        gameLoop.stop();
+        
+        gameScene.setRoot(root);
         theStage.show();
     }
 
