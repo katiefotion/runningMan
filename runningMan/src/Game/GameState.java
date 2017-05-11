@@ -6,10 +6,7 @@
  */
 package Game;
 
-import GameObjects.Pit;
-import GameObjects.Complication;
-import GameObjects.Threat;
-import GameObjects.Obstacle;
+import GameObjects.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -22,20 +19,26 @@ public class GameState {
     
     private int currentScore;
     private List<Complication> complications;
+    private Missile m;
     boolean spawn_flag = true;
     
     public GameState() {
         
-               //this.complications = (List<Complication>) new Complication();      
-        this.complications = new ArrayList();  //TODO: fix stack overflow error in complications generation
-        
-        Complication.initComplication(this); //
-        // This is for now...
-        //this.complications.add(new Obstacle(1200, 329));
-        //this.complications.add(new Pit(2000, 450));
-        //this.complications.add(new Threat(3000, 300));
+        this.complications = new ArrayList();  
+        Complication.initComplication(this); 
         
         this.currentScore = 0;
+    }
+    
+    public boolean containsMissile() {
+        if(this.m == null) {
+            return false;
+        }
+        return true;
+    }
+    
+    public void addMissile(Missile m) {
+        this.m = m;
     }
     
     // Sets current score to "amount" more than previous score
@@ -120,18 +123,27 @@ public class GameState {
         for (Complication c : complications) {
             c.setX(c.getX() - speedCoeff);
         }
+       
+        if(this.containsMissile()) {
+            m.tick();
+        }
         
-        //System.out.println("TIme now: S" + t);
-        //System.out.println("TIme mod 12: S" + ((int)t)%12);
         if((int)(t*100)%600 == 0 && t > 1)
         {
-            System.out.println("******* ADDING NEW COMPLICATION ********" + t);
             boolean shiftedImage = this.update(ch);
             
             return shiftedImage;
         }
         
         return false;
+    }
+    
+    public int getMissileX() {
+        return m.getX();
+    }
+    
+    public int getMissileY() {
+        return m.getY();
     }
     
         //update every some odd seconds, grabbing location of the current character on the screen

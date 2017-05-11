@@ -27,7 +27,7 @@ public class GameApp extends Application implements
   private final int GAME_HEIGHT = 600;
 
   // Tracks known characters and complications
-  static Sprite character;
+  static Sprite character, missile;
   static ArrayList<Sprite> complications;
 
   // Button locations
@@ -66,6 +66,14 @@ public class GameApp extends Application implements
 
   public static void setCharacterX(int x) {
     character.setX(x);
+  }
+  
+  public static void setMissileX(int x) {
+      missile.setX(x);
+  }
+  
+  public static void setMissileY(int y) {
+      missile.setY(y);
   }
 
   // Set complications' x values the first time 
@@ -111,6 +119,7 @@ public class GameApp extends Application implements
 
     // Initialize empty character and complication structures
     character = new Sprite(100, new Image("character.png"));
+    missile = new Sprite(new Image("missile.png"));     
     complications = new ArrayList<>();
 
     // Fill character and complication structures with relevant info
@@ -131,7 +140,7 @@ public class GameApp extends Application implements
     final long timeStart = System.currentTimeMillis();
 
     // Listen for user input continuously 
-    ActionHandler ah = new ActionHandler(gameScene, gameLoop, control, gc, character, complications, timeStart);
+    ActionHandler ah = new ActionHandler(gameScene, gameLoop, control, gc, character, missile, complications, timeStart);
     KeyFrame kf = ah.listen();
     gameLoop.getKeyFrames().add(kf);
     gameLoop.play();

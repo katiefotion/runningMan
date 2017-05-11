@@ -10,7 +10,7 @@ package Controller;
 import Game.Game;
 import GameGUI.GameApp;
 import GameObjects.Character;
-import GameObjects.Complication;
+import GameObjects.*;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.image.Image;
@@ -62,9 +62,6 @@ public class Controller {
    
     public void characterJump() {
         
-        // Access character in model
-        
-        
         // Make character in model jump after checking if character is in the air
         if(c.getY()>=275){
             //System.out.println("going up");
@@ -73,6 +70,11 @@ public class Controller {
         
         // Make GUI reflect that change
         GameApp.setCharacterY(c.getY());
+    }
+    
+    public void characterShoot() {
+       Missile m = new Missile(this.game.getCharacter().getX() + 10, this.game.getCharacter().getY());
+       this.game.currentState().addMissile(m);
     }
     
     public void characterMoveRight(boolean b) {
@@ -192,6 +194,11 @@ public class Controller {
         if(c.isRunningLeft()){
             c.moveLeft();
         }
+        
+        if(this.game.currentState().containsMissile())  {
+            GameApp.setMissileX(game.currentState().getMissileX());
+            GameApp.setMissileY(game.currentState().getMissileY());
+        }
             
         // Increment complications' x coordinates with time  
         // (and y coordinates in case new complication is created)
@@ -236,6 +243,10 @@ public class Controller {
         
         return false;
     } 
+    
+    public boolean checkMissile() {
+        return this.game.currentState().containsMissile();
+    }
 }
 
 

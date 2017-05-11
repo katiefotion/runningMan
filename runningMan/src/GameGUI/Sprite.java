@@ -25,6 +25,11 @@ public class Sprite {
         this.x = x;
     }
     
+    public Sprite(Image i) {
+        
+        this.image = i;
+    }
+    
     public Sprite(int x, Image i) {
         
         this.x = x;
