@@ -8,6 +8,7 @@
 package GameGUI;
 
 import Controller.Controller;
+import MenuGUI.Menu;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
@@ -39,6 +41,8 @@ public class ActionHandler {
     private final Sprite character, missile;
     private final ArrayList<Sprite> complications;
     private final long timeStart;
+    private Menu menu;
+    private Stage theStage;
     
     // Set background and button images and locations
     final Image background = new Image("background.png");
@@ -55,8 +59,10 @@ public class ActionHandler {
     // Determines how fast the complications are moving 
     private int speedCoeff = 2;
     
-    public ActionHandler(Scene theScene, Timeline gameLoop, Controller control, GraphicsContext gc, Sprite character, Sprite missile, ArrayList<Sprite> complications, long timeStart) {
-        this.theScene = theScene;
+    public ActionHandler(Stage theStage, Menu menu, Timeline gameLoop, Controller control, GraphicsContext gc, Sprite character, Sprite missile, ArrayList<Sprite> complications, long timeStart) {
+        this.theStage = theStage;
+        this.theScene = theStage.getScene();
+        this.menu = menu;
         this.gameLoop = gameLoop;
         this.control = control;
         this.gc = gc;
@@ -164,7 +170,8 @@ public class ActionHandler {
                 {
                     if ((e.getX() > quitX) && (e.getX() < (quitX + quit.getWidth())) && (e.getY() > quitY) && (e.getY() < (quitY+quit.getHeight()))) {
                         System.out.println("Quitting game...");
-                        System.exit(0);
+                        gameLoop.stop();
+                        menu.showMenu(theStage);
                     }
                     else if ((e.getX() > pauseX) && (e.getX() < (pauseX + pause.getWidth())) && (e.getY() > pauseY) && (e.getY() < (pauseY+pause.getHeight()))) {
                         System.out.println("Pausing game...");

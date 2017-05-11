@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author Flex
+ * @author Felix
  */
 public class Menu {
 
