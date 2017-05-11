@@ -7,9 +7,12 @@ package GameGUI;
 
 import MenuGUI.Menu;
 import Controller.Controller;
+import Database.HighScores;
+import Database.HighScores.PlayerScore;
 import Game.Game;
 import Game.Player;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -23,144 +26,152 @@ import javafx.scene.image.Image;
 public class GameApp extends Application implements
         Menu.MenuEventListener {
 
-  private final int GAME_WIDTH = 800;
-  private final int GAME_HEIGHT = 600;
+    private final int GAME_WIDTH = 800;
+    private final int GAME_HEIGHT = 600;
 
-  // Tracks known characters and complications
-  static Sprite character, missile;
-  static ArrayList<Sprite> complications;
+    // Tracks known characters and complications
+    static Sprite character, missile;
+    static ArrayList<Sprite> complications;
 
-  // Button locations
-  final int quitX = 15;
-  final int quitY = 15;
-  final int pauseX = 185;
-  final int pauseY = 20;
-  final int playX = 260;
-  final int playY = 20;
+    // Button locations
+    final int quitX = 15;
+    final int quitY = 15;
+    final int pauseX = 185;
+    final int pauseY = 20;
+    final int playX = 260;
+    final int playY = 20;
 
-  private Scene gameScene;
-  private Stage theStage;
-  private Menu menu;
+    private Scene gameScene;
+    private Stage theStage;
+    private Menu menu;
 
-  // Launch application
-  public static void initGameApp(String[] args) {
-    launch(args);
-  }
-
-  @Override
-  public void start(Stage theStage) {
-    this.theStage = theStage;
-    this.theStage.setTitle("Running Man");
-    
-    this.gameScene = new Scene(new Group(), GAME_WIDTH, GAME_HEIGHT);
-    this.theStage.setScene(gameScene);
-    
-    menu = new Menu(this);
-    menu.showMenu(theStage);
-  }
-
-  // Set character's y value based on current model
-  public static void setCharacterY(int y) {
-    character.setY(y);
-  }
-
-  public static void setCharacterX(int x) {
-    character.setX(x);
-  }
-  
-  public static void setMissileX(int x) {
-      missile.setX(x);
-  }
-  
-  public static void setMissileY(int y) {
-      missile.setY(y);
-  }
-
-  // Set complications' x values the first time 
-  public static void setComplicationsX(ArrayList<Integer> xs) {
-    for (int i = 0; i < xs.size(); i++) {
-      complications.add(new Sprite(xs.get(i)));
+    // Launch application
+    public static void initGameApp(String[] args) {
+        launch(args);
     }
-  }
 
-  // Update complications' x values based on current model
-  public static void updateComplicationsX(ArrayList<Integer> xs, ArrayList<Integer> ys, ArrayList<Image> images) {
-    if(xs.size() > complications.size()) {
-        complications.add(new Sprite(xs.get(xs.size()-1), ys.get(ys.size()-1), images.get(images.size()-1)));
+    @Override
+    public void start(Stage theStage) {
+        this.theStage = theStage;
+        this.theStage.setTitle("Running Man");
+
+        this.gameScene = new Scene(new Group(), GAME_WIDTH, GAME_HEIGHT);
+        this.theStage.setScene(gameScene);
+
+        menu = new Menu(this);
+        menu.showMenu(theStage);
     }
-    for (int i = 0; i < xs.size(); i++) {
-        complications.get(i).setX(xs.get(i));
+
+    // Set character's y value based on current model
+    public static void setCharacterY(int y) {
+        character.setY(y);
     }
-    for(int i = 0; i < ys.size(); i++) {
-        complications.get(i).setY(ys.get(i));
+
+    public static void setCharacterX(int x) {
+        character.setX(x);
     }
-    for(int i = 0; i < images.size(); i++) {
-        complications.get(i).setImage(images.get(i));
+
+    public static void setMissileX(int x) {
+        missile.setX(x);
     }
-  }
 
-  // Set / update complications' y values based on current model
-  public static void setComplicationsY(ArrayList<Integer> ys) {
-    for (int i = 0; i < ys.size(); i++) {
-      complications.get(i).setY(ys.get(i));
+    public static void setMissileY(int y) {
+        missile.setY(y);
     }
-  }
 
-  // Set complications' images 
-  public static void setComplicationsImage(ArrayList<Image> images) {
-    for (int i = 0; i < images.size(); i++) {
-      complications.get(i).setImage(images.get(i));
+    // Set complications' x values the first time 
+    public static void setComplicationsX(ArrayList<Integer> xs) {
+        for (int i = 0; i < xs.size(); i++) {
+            complications.add(new Sprite(xs.get(i)));
+        }
     }
-  }
 
-  public void startGame() {
-    // Start controller to mediate between model and view
-    Controller control = new Controller(new Game(new Player(1)));
+    // Update complications' x values based on current model
+    public static void updateComplicationsX(ArrayList<Integer> xs, ArrayList<Integer> ys, ArrayList<Image> images) {
+        if (xs.size() > complications.size()) {
+            complications.add(new Sprite(xs.get(xs.size() - 1), ys.get(ys.size() - 1), images.get(images.size() - 1)));
+        }
+        for (int i = 0; i < xs.size(); i++) {
+            complications.get(i).setX(xs.get(i));
+        }
+        for (int i = 0; i < ys.size(); i++) {
+            complications.get(i).setY(ys.get(i));
+        }
+        for (int i = 0; i < images.size(); i++) {
+            complications.get(i).setImage(images.get(i));
+        }
+    }
 
-    // Initialize empty character and complication structures
-    character = new Sprite(100, new Image("character.png"));
-    missile = new Sprite(new Image("missile.png"));     
-    complications = new ArrayList<>();
+    // Set / update complications' y values based on current model
+    public static void setComplicationsY(ArrayList<Integer> ys) {
+        for (int i = 0; i < ys.size(); i++) {
+            complications.get(i).setY(ys.get(i));
+        }
+    }
 
-    // Fill character and complication structures with relevant info
-    // based on model
-    control.initializeVariables();
+    // Set complications' images 
+    public static void setComplicationsImage(ArrayList<Image> images) {
+        for (int i = 0; i < images.size(); i++) {
+            complications.get(i).setImage(images.get(i));
+        }
+    }
 
-    Group root = new Group();
-    gameScene.setRoot(root);
+    public void startGame() {
+        // Start controller to mediate between model and view
+        Controller control = new Controller(new Game(new Player(1)));
 
-    Canvas canvas = new Canvas(GAME_WIDTH, GAME_HEIGHT);
-    root.getChildren().add(canvas);
+        // Initialize empty character and complication structures
+        character = new Sprite(100, new Image("character.png"));
+        missile = new Sprite(new Image("missile.png"));
+        complications = new ArrayList<>();
 
-    GraphicsContext gc = canvas.getGraphicsContext2D();
+        // Fill character and complication structures with relevant info
+        // based on model
+        control.initializeVariables();
 
-    // Start timer
-    Timeline gameLoop = new Timeline();
-    gameLoop.setCycleCount(Timeline.INDEFINITE);
-    final long timeStart = System.currentTimeMillis();
+        Group root = new Group();
+        gameScene.setRoot(root);
 
-    // Listen for user input continuously 
-    ActionHandler ah = new ActionHandler(theStage, menu, gameLoop, control, gc, character, missile, complications, timeStart);
-    KeyFrame kf = ah.listen();
-    gameLoop.getKeyFrames().add(kf);
-    gameLoop.play();
+        Canvas canvas = new Canvas(GAME_WIDTH, GAME_HEIGHT);
+        root.getChildren().add(canvas);
 
-    // Display the scene
-    theStage.show();
-  }
+        GraphicsContext gc = canvas.getGraphicsContext2D();
 
-  @Override
-  public void onStartGameSelected() {
-    startGame();
-  }
+        // Start timer
+        Timeline gameLoop = new Timeline();
+        gameLoop.setCycleCount(Timeline.INDEFINITE);
+        final long timeStart = System.currentTimeMillis();
 
-  @Override
-  public void onHighScoresSelected() {
-    //TODO: fix rest server and make a call to display a new scene with the high scores
-  }
+        // Listen for user input continuously 
+        ActionHandler ah = new ActionHandler(theStage, menu, gameLoop, control, gc, character, missile, complications, timeStart);
+        KeyFrame kf = ah.listen();
+        gameLoop.getKeyFrames().add(kf);
+        gameLoop.play();
 
-  @Override
-  public void onQuitSelected() {
-    theStage.close();
-  }
+        // Display the scene
+        theStage.show();
+    }
+
+    @Override
+    public void onStartGameSelected() {
+        startGame();
+    }
+
+    @Override
+    //TODO: replace with a new high score scene
+    public void onHighScoresSelected() {
+        HighScores highscores = new HighScores();
+        List<PlayerScore> scores = highscores.getTopScores(5);
+
+        if (scores != null) {
+            for (PlayerScore score : scores) {
+                System.out.println(score.getName() + " : " + score.getScore());
+            }
+        }
+    }
+
+    @Override
+    public void onQuitSelected() {
+        theStage.close();
+    }
 }

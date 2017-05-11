@@ -18,6 +18,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ *
+ * @author Felix
+ */
 public class NetClientGet {
   
   public static int lastHighScoreId = 0;
@@ -100,7 +104,7 @@ public class NetClientGet {
 
             String playerName = playerScore.getName();
             double score = playerScore.getScore();
-            int highScoreId = ++lastHighScoreId;
+            int highScoreId = playerScore.getHid();
             
             String newHighScoreString
                     = "     <highscores> \n"
