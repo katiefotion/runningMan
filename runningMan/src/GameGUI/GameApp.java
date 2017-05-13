@@ -44,7 +44,7 @@ public class GameApp extends Application implements
 
     private static Scene gameScene;
     private static Stage theStage;
-    private Menu menu;
+    private static Menu menu;
     private static Timeline gameLoop;
 
     // Launch application
@@ -61,7 +61,7 @@ public class GameApp extends Application implements
         this.theStage.setScene(gameScene);
 
         menu = new Menu(this);
-        menu.showMenu(theStage);
+        showMenu();
     }
 
     // Set character's y value based on current model
@@ -159,6 +159,10 @@ public class GameApp extends Application implements
         
         gameScene.setRoot(root);
         theStage.show();
+    }
+    
+    public static void showMenu() {
+        menu.showMenu(theStage);
     }
 
     @Override

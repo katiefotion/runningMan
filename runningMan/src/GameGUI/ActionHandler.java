@@ -45,7 +45,7 @@ public class ActionHandler {
     private Stage theStage;
     
     // Set background and button images and locations
-    final Image background = new Image("background.png");
+    final Image background = new Image("background_game.png");
     final Image quit = new Image("quit.png");
     final Image pause = new Image("pause.png");
     final Image play = new Image("play.png");

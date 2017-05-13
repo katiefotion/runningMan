@@ -14,11 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -218,23 +224,29 @@ public class Controller {
         if (collision) {
             BorderPane borderLayout = new BorderPane();
             VBox verticalLayout = new VBox();
-            
+
+            Image backgroundImage = new Image("background_endgame.png");
+            borderLayout.setBackground(new Background(
+                    new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                            BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+
             TextField nameText = new TextField();
             Label scoreLabel = new Label();
             Button submitScoreButton = new Button();
-
+            
             submitScoreButton.setText("Submit");
             scoreLabel.setText(String.valueOf(game.currentState().getCurrentScore()));
             nameText.setPromptText("Enter your name");
 
             verticalLayout.getChildren().addAll(nameText, scoreLabel, submitScoreButton);
+            verticalLayout.setAlignment(Pos.CENTER);
             borderLayout.setCenter(verticalLayout);
 
             submitScoreButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent t) {
                     //call database
-                    
+                    System.out.println("Stored score");
                 }
             });
 
