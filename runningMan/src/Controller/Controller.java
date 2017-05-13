@@ -37,6 +37,7 @@ public class Controller {
     private final Game game;
     private double timer1 = 4;
     private double timer2 = 0;
+    private double timer3 = 0;
     private Character c;
 
     ArrayList<Image> complicationsImage;
@@ -153,9 +154,11 @@ public class Controller {
 
     public void tick(int speedCoeff, double t) {
 
-        boolean shiftedImage = game.currentState().tick(speedCoeff, t, c.getX());
+        timer3 = timer3 + .2;
+        boolean shiftedImage = game.currentState().tick(speedCoeff, t,c.getX());
+        
+        if(shiftedImage) {
 
-        if (shiftedImage) {
             ArrayList<Image> compImageTemp = new ArrayList<>();
             for (int i = 1; i < complicationsImage.size(); i++) {
                 compImageTemp.add(complicationsImage.get(i));
@@ -206,7 +209,13 @@ public class Controller {
             c.moveLeft();
         }
 
-        if (this.game.currentState().containsMissile()) {
+        if(!c.isGoingUp() && !c.isGoingDown()){
+            GameApp.animateCharacter((int) (timer3%6));
+        }
+        else
+            GameApp.setStillCharacter();
+        if(this.game.currentState().containsMissile())  {
+
             GameApp.setMissileX(game.currentState().getMissileX());
             GameApp.setMissileY(game.currentState().getMissileY());
         }
