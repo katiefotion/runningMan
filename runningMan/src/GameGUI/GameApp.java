@@ -35,7 +35,10 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class GameApp extends Application implements
         Menu.MenuEventListener {
@@ -205,35 +208,55 @@ public class GameApp extends Application implements
     public static void onEndGame(int score) {
         gameLoop.stop();
 
-        BorderPane borderLayout = new BorderPane();
-        VBox verticalLayout = new VBox();
+        GridPane gridLayout = new GridPane();
+        gridLayout.setHgap(10);
+        gridLayout.setVgap(12);
 
         Image backgroundImage = new Image("background_endgame.png");
-        borderLayout.setBackground(new Background(
+        gridLayout.setBackground(new Background(
                 new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                         BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
         TextField nameText = new TextField();
+        Label nameLabel = new Label();
         Label scoreLabel = new Label();
-        Button submitScoreButton = new Button();
+        Label scoreValueLabel = new Label();
+        Button submitButton = new Button();
 
-        submitScoreButton.setText("Submit");
-        scoreLabel.setText("Score: " + String.valueOf(score));
+        nameLabel.setText("Name: ");
+        nameLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
+
+        scoreLabel.setText("Score: ");
+        scoreValueLabel.setText(String.valueOf(score));
+        scoreLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
+        scoreValueLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
+        submitButton.setText("Submit");
+
         nameText.setPromptText("Enter your name");
 
-        verticalLayout.getChildren().addAll(nameText, scoreLabel, submitScoreButton);
-        verticalLayout.setAlignment(Pos.CENTER);
-        borderLayout.setCenter(verticalLayout);
+        gridLayout.add(nameLabel, 0, 0);
+        gridLayout.add(nameText, 1, 0);
+        gridLayout.add(scoreLabel, 0, 1);
+        gridLayout.add(scoreValueLabel, 1, 1);
+        gridLayout.add(submitButton, 1, 2);
+        gridLayout.setAlignment(Pos.CENTER);
 
-        submitScoreButton.setOnAction(new EventHandler<ActionEvent>() {
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
-                //call database
-                System.out.println("Stored score");
+                //store highscore
+                HighScores highscores = new HighScores();
+                String name = nameText.getText();
+
+                if (name.isEmpty()) {
+                    name = " Anonymous";
+                }
+
+                highscores.insertHighScore(new PlayerScore(name, score));
             }
         });
 
-        gameScene.setRoot(borderLayout);
+        gameScene.setRoot(gridLayout);
         theStage.show();
     }
 
@@ -246,7 +269,7 @@ public class GameApp extends Application implements
     //TODO: replace with a new high score scene
     public void onHighScoresSelected() {
         HighScores highscores = new HighScores();
-        List<PlayerScore> scores = highscores.getTopScores(5);
+        List<PlayerScore> scores = highscores.getTopScores(10);
 
         if (scores != null) {
             for (PlayerScore score : scores) {

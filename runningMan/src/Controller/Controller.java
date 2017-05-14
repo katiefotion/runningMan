@@ -145,7 +145,7 @@ public class Controller {
             if (comp.isObstacle()) {
                 complicationsImage.add(new Image("obstacle.png"));
             } else if (comp.isPit()) {
-                complicationsImage.add(new Image("pit.png"));
+                complicationsImage.add(new Image("pit_blue_flat.png"));
             } else if (comp.isThreat()) {
                 complicationsImage.add(new Image("threat.png"));
             }

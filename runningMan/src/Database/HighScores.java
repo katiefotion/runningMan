@@ -22,15 +22,15 @@ public class HighScores {
 
         private int hid;
         private String name;
-        private double score;
+        private int score;
 
-        public PlayerScore(int hid, String name, double score) {
+        public PlayerScore(int hid, String name, int score) {
             this.hid = hid;
             this.name = name;
             this.score = score;
         }
 
-        public PlayerScore(String name, double score) {
+        public PlayerScore(String name, int score) {
             this.hid = lastScoreId;
             this.name = name;
             this.score = score;
@@ -40,7 +40,7 @@ public class HighScores {
             return this.hid;
         }
 
-        public double getScore() {
+        public int getScore() {
             return this.score;
         }
 
@@ -61,19 +61,25 @@ public class HighScores {
     //TODO: get the first limit number of scores in highScores list
     public List<PlayerScore> getTopScores(int limit) {
         List<PlayerScore> scores = null;
-        
+
         try {
             scores = NetClientGet.getHighScores();
-            
-            if(limit > 0) {
-                scores = scores.subList(0, limit);
+            int numScores = scores.size();
+
+            if (limit > 0) {
+                if (numScores < limit) {
+                    scores = scores.subList(0, numScores);
+                } else {
+                    scores = scores.subList(0, limit);
+                }
             }
+
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(HighScores.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
             Logger.getLogger(HighScores.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return scores;
     }
 

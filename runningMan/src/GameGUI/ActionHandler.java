@@ -219,7 +219,7 @@ public class ActionHandler {
                 gc.fillText(pointsText, 590, 50);
                 gc.strokeText(pointsText, 590, 50);
 
-                game.setScore((int) Double.parseDouble(score));
+                game.setScore((int) (Double.parseDouble(score)*100));
 
                 // Draw quit button
                 gc.drawImage(quit, quitX, quitY);
