@@ -155,9 +155,9 @@ public class Controller {
     public void tick(int speedCoeff, double t) {
 
         timer3 = timer3 + .2;
-        boolean shiftedImage = game.currentState().tick(speedCoeff, t,c.getX());
-        
-        if(shiftedImage) {
+        boolean shiftedImage = game.currentState().tick(speedCoeff, t, c.getX());
+
+        if (shiftedImage) {
 
             ArrayList<Image> compImageTemp = new ArrayList<>();
             for (int i = 1; i < complicationsImage.size(); i++) {
@@ -209,12 +209,12 @@ public class Controller {
             c.moveLeft();
         }
 
-        if(!c.isGoingUp() && !c.isGoingDown()){
-            GameApp.animateCharacter((int) (timer3%6));
-        }
-        else
+        if (!c.isGoingUp() && !c.isGoingDown()) {
+            GameApp.animateCharacter((int) (timer3 % 6));
+        } else {
             GameApp.setStillCharacter();
-        if(this.game.currentState().containsMissile())  {
+        }
+        if (this.game.currentState().containsMissile()) {
 
             GameApp.setMissileX(game.currentState().getMissileX());
             GameApp.setMissileY(game.currentState().getMissileY());
@@ -231,35 +231,9 @@ public class Controller {
         boolean collision = checkCollision(c, complicationsX, complicationsY, complicationsImage);
 
         if (collision) {
-            BorderPane borderLayout = new BorderPane();
-            VBox verticalLayout = new VBox();
+            int score = game.currentState().getCurrentScore();
 
-            Image backgroundImage = new Image("background_endgame.png");
-            borderLayout.setBackground(new Background(
-                    new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-
-            TextField nameText = new TextField();
-            Label scoreLabel = new Label();
-            Button submitScoreButton = new Button();
-            
-            submitScoreButton.setText("Submit");
-            scoreLabel.setText(String.valueOf(game.currentState().getCurrentScore()));
-            nameText.setPromptText("Enter your name");
-
-            verticalLayout.getChildren().addAll(nameText, scoreLabel, submitScoreButton);
-            verticalLayout.setAlignment(Pos.CENTER);
-            borderLayout.setCenter(verticalLayout);
-
-            submitScoreButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent t) {
-                    //call database
-                    System.out.println("Stored score");
-                }
-            });
-
-            GameApp.onEndGame(borderLayout);
+            GameApp.onEndGame(score);
         }
     }
 
@@ -291,4 +265,6 @@ public class Controller {
     public boolean checkMissile() {
         return this.game.currentState().containsMissile();
     }
+    
+    public Game getGame() { return this.game; }
 }

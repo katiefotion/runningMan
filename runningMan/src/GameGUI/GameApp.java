@@ -16,13 +16,26 @@ import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 public class GameApp extends Application implements
         Menu.MenuEventListener {
@@ -42,6 +55,7 @@ public class GameApp extends Application implements
     final int playX = 260;
     final int playY = 20;
 
+    private Game game;
     private static Scene gameScene;
     private static Stage theStage;
     private static Menu menu;
@@ -62,13 +76,6 @@ public class GameApp extends Application implements
 
         menu = new Menu(this);
         showMenu();
-    }
-
-    public static void onEndGame(Parent root) {
-        gameLoop.stop();
-
-        gameScene.setRoot(root);
-        theStage.show();
     }
 
     public static void showMenu() {
@@ -160,7 +167,8 @@ public class GameApp extends Application implements
 
     public void startGame() {
         // Start controller to mediate between model and view
-        Controller control = new Controller(new Game(new Player(1)));
+        game = new Game(new Player(1));
+        Controller control = new Controller(game);
 
         // Initialize empty character and complication structures
         character = new Sprite(100, new Image("character.png"));
@@ -180,7 +188,7 @@ public class GameApp extends Application implements
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         // Start timer
-        Timeline gameLoop = new Timeline();
+        gameLoop = new Timeline();
         gameLoop.setCycleCount(Timeline.INDEFINITE);
         final long timeStart = System.currentTimeMillis();
 
@@ -191,6 +199,41 @@ public class GameApp extends Application implements
         gameLoop.play();
 
         // Display the scene
+        theStage.show();
+    }
+
+    public static void onEndGame(int score) {
+        gameLoop.stop();
+
+        BorderPane borderLayout = new BorderPane();
+        VBox verticalLayout = new VBox();
+
+        Image backgroundImage = new Image("background_endgame.png");
+        borderLayout.setBackground(new Background(
+                new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+
+        TextField nameText = new TextField();
+        Label scoreLabel = new Label();
+        Button submitScoreButton = new Button();
+
+        submitScoreButton.setText("Submit");
+        scoreLabel.setText("Score: " + String.valueOf(score));
+        nameText.setPromptText("Enter your name");
+
+        verticalLayout.getChildren().addAll(nameText, scoreLabel, submitScoreButton);
+        verticalLayout.setAlignment(Pos.CENTER);
+        borderLayout.setCenter(verticalLayout);
+
+        submitScoreButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                //call database
+                System.out.println("Stored score");
+            }
+        });
+
+        gameScene.setRoot(borderLayout);
         theStage.show();
     }
 
