@@ -19,6 +19,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Group;
@@ -29,6 +30,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -222,6 +224,7 @@ public class GameApp extends Application implements
         Label scoreLabel = new Label();
         Label scoreValueLabel = new Label();
         Button submitButton = new Button();
+        Button returnMenuButton = new Button();
 
         nameLabel.setText("Name: ");
         nameLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
@@ -230,7 +233,9 @@ public class GameApp extends Application implements
         scoreValueLabel.setText(String.valueOf(score));
         scoreLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
         scoreValueLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
+
         submitButton.setText("Submit");
+        returnMenuButton.setText("Main Menu");
 
         nameText.setPromptText("Enter your name");
 
@@ -239,6 +244,7 @@ public class GameApp extends Application implements
         gridLayout.add(scoreLabel, 0, 1);
         gridLayout.add(scoreValueLabel, 1, 1);
         gridLayout.add(submitButton, 1, 2);
+        gridLayout.add(returnMenuButton, 0, 2);
         gridLayout.setAlignment(Pos.CENTER);
 
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -253,6 +259,42 @@ public class GameApp extends Application implements
                 }
 
                 highscores.insertHighScore(new PlayerScore(name, score));
+                showMenu();
+            }
+        });
+
+        submitButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                gameScene.setCursor(Cursor.HAND);
+            }
+        });
+
+        submitButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                gameScene.setCursor(Cursor.DEFAULT);
+            }
+        });
+
+        returnMenuButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent t) {
+                showMenu();
+            }
+        });
+
+        returnMenuButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                gameScene.setCursor(Cursor.HAND);
+            }
+        });
+
+        returnMenuButton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                gameScene.setCursor(Cursor.DEFAULT);
             }
         });
 
@@ -281,5 +323,15 @@ public class GameApp extends Application implements
     @Override
     public void onQuitSelected() {
         theStage.close();
+    }
+
+    @Override
+    public void onOptionEnter() {
+        gameScene.setCursor(Cursor.HAND);
+    }
+
+    @Override
+    public void onOptionExit() {
+        gameScene.setCursor(Cursor.DEFAULT);
     }
 }
