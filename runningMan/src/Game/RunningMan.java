@@ -22,19 +22,7 @@ public class RunningMan {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
-
-        //just testing that rest server works (this should not break.
-        //if it does, make sure your database is setup properly
-
-//        try {
-//            System.out.println(NetClientGet.getHighScores());
-//        } catch (ParserConfigurationException ex) {
-//            Logger.getLogger(RunningMan.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (SAXException ex) {
-//            Logger.getLogger(RunningMan.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
+        
         GameApp.initGameApp(args);
     }
 }

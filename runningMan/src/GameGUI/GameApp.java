@@ -55,6 +55,8 @@ public class GameApp extends Application implements
 
     private final int GAME_WIDTH = 800;
     private final int GAME_HEIGHT = 600;
+    private static final int MENU_BUTTON_WIDTH = 128;
+    private static final int MENU_BUTTON_HEIGHT = 32;
 
     // Tracks known characters and complications
     static Sprite character, missile;
@@ -148,25 +150,24 @@ public class GameApp extends Application implements
         }
     }
 
-  
     // Update complications' values based on current model
     public static void updateComplications(ArrayList<Integer> xs, ArrayList<Integer> ys, ArrayList<Image> images, int removal) {
-    
-        if(xs.size() > complications.size()) {
-            complications.add(new Sprite(xs.get(xs.size()-1), ys.get(ys.size()-1), images.get(images.size()-1)));
+
+        if (xs.size() > complications.size()) {
+            complications.add(new Sprite(xs.get(xs.size() - 1), ys.get(ys.size() - 1), images.get(images.size() - 1)));
         }
 
-        if(xs.size() < complications.size()) {
+        if (xs.size() < complications.size()) {
             complications.remove(removal);
         }
 
         for (int i = 0; i < xs.size(); i++) {
             complications.get(i).setX(xs.get(i));
         }
-        for(int i = 0; i < ys.size(); i++) {
+        for (int i = 0; i < ys.size(); i++) {
             complications.get(i).setY(ys.get(i));
         }
-        for(int i = 0; i < images.size(); i++) {
+        for (int i = 0; i < images.size(); i++) {
             complications.get(i).setImage(images.get(i));
         }
     }
@@ -239,19 +240,31 @@ public class GameApp extends Application implements
         Label nameLabel = new Label();
         Label scoreLabel = new Label();
         Label scoreValueLabel = new Label();
-        Button submitButton = new Button();
-        Button returnMenuButton = new Button();
+        ImageView submitButton = null;
+        ImageView returnMenuButton = null;
+
+        try {
+            submitButton = new ImageView(new Image(new FileInputStream("src/blue_button_submit.png")));
+            returnMenuButton = new ImageView(new Image(new FileInputStream("src/blue_button_menu.png")));
+
+            submitButton.setFitWidth(MENU_BUTTON_WIDTH);
+            submitButton.setFitHeight(MENU_BUTTON_HEIGHT);
+
+            returnMenuButton.setFitWidth(MENU_BUTTON_WIDTH);
+            returnMenuButton.setFitHeight(MENU_BUTTON_HEIGHT);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GameApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         nameLabel.setText("Name: ");
         nameLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
+        nameLabel.setTextFill(Color.WHITE);
 
         scoreLabel.setText("Score: ");
         scoreValueLabel.setText(String.valueOf(score));
         scoreLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
         scoreValueLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
-
-        submitButton.setText("Submit");
-        returnMenuButton.setText("Main Menu");
+        scoreValueLabel.setTextFill(Color.WHITE);
 
         nameText.setPromptText("Enter your name");
 
@@ -263,9 +276,9 @@ public class GameApp extends Application implements
         gridLayout.add(returnMenuButton, 0, 2);
         gridLayout.setAlignment(Pos.CENTER);
 
-        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+        submitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent t) {
+            public void handle(MouseEvent t) {
                 //store highscore
                 HighScores highscores = new HighScores();
                 String name = nameText.getText();
@@ -293,9 +306,9 @@ public class GameApp extends Application implements
             }
         });
 
-        returnMenuButton.setOnAction(new EventHandler<ActionEvent>() {
+        returnMenuButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent t) {
+            public void handle(MouseEvent t) {
                 showMenu();
             }
         });
@@ -327,88 +340,87 @@ public class GameApp extends Application implements
     //TODO: replace with a new high score scene
     public void onHighScoresSelected() {
 
+        ImageView menuImage = null;
+        Image backgroundImage = null;
 
-        ImageView menuImage = new ImageView();
-        Image backgroundImage = new Image("background.png");
-
- 
         try {
-            
-            menuImage = new ImageView(new Image(new FileInputStream("src/main_menu.png")));
+            menuImage = new ImageView(new Image(new FileInputStream("src/blue_button_menu.png")));
             backgroundImage = new Image("background_endgame.png");
-            
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GameApp.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         //set width and height of menuImage
-        menuImage.setFitWidth(256);
-        menuImage.setFitHeight(128);
-        
+        menuImage.setFitWidth(MENU_BUTTON_WIDTH);
+        menuImage.setFitHeight(MENU_BUTTON_HEIGHT);
+
         GridPane highScoreLayout = new GridPane();
         VBox buttonsLayout = new VBox(4);
-        
+
         buttonsLayout.getChildren().addAll(menuImage);
         buttonsLayout.setAlignment(Pos.TOP_CENTER);
-        
+
         //set high score layout 
         highScoreLayout.setAlignment(Pos.CENTER);
         highScoreLayout.setPadding(new Insets(10, 10, 10, 10));
-        
-        //set main menu button
-        highScoreLayout.add(buttonsLayout,0,0);
-        
-        Text text = new Text("HIGH SCORES");
+
+        Text text = new Text("    HIGH SCORES     ");
         text.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
-        text.setFill(Color.WHITE);
-        
-        highScoreLayout.add(text,0,1);
-        
-        //TODO: Set highscores here (unsure if it works)
+        text.setFill(Color.rgb(110, 185, 255));
+
+        highScoreLayout.add(text, 0, 0);
+
         HighScores highscores = new HighScores();
         List<PlayerScore> scores = highscores.getTopScores(10);
-        int i = 2; //counter to place scores
+        int i = 1; //counter to place scores
         if (scores != null) {
             for (PlayerScore score : scores) {
                 Text t = new Text();
                 t.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
                 t.setFill(Color.WHITE);
                 t.setText(i + " : " + score.getName() + " : " + score.getScore());
-                
+
                 //add to highScoreLayout
-                highScoreLayout.add(t,0,i);
+                highScoreLayout.add(t, 0, i);
                 i++;
             }
         }
-        
+
+        //set main menu button
+        highScoreLayout.add(buttonsLayout, 1, i + 1);
+
         i = 0; //bring back to zero in the end to fix any potential errors
-        
+
         //set background image
         highScoreLayout.setBackground(new Background(
-            new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-        
+                new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+
         menuImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event){
-                    showMenu();
-                }
-            });
-        
-   
+            @Override
+            public void handle(MouseEvent event) {
+                showMenu();
+            }
+        });
+
+        menuImage.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                gameScene.setCursor(Cursor.HAND);
+            }
+        });
+
+        menuImage.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                gameScene.setCursor(Cursor.DEFAULT);
+            }
+        });
+
         gameScene.setRoot(highScoreLayout);
         theStage.show();
     }
-//         highscore = new HighScore(this);
-//        HighScores highscores = new HighScores();
-//        List<PlayerScore> scores = highscores.getTopScores(10);
-//
-//        if (scores != null) {
-//            for (PlayerScore score : scores) {
-//                System.out.println(score.getName() + " : " + score.getScore());
-//            }
-//        }
-    
 
     @Override
     public void onQuitSelected() {
