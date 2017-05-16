@@ -184,8 +184,7 @@ public class ActionHandler {
                         gameLoop.play();
                     }
                 }
-            }
-        });
+            });
 
         KeyFrame kf = new KeyFrame(
             Duration.seconds(0.017),                // 60 FPS
@@ -216,12 +215,13 @@ public class ActionHandler {
                     }
                     
                     // Draw score
-                    Font theFont = Font.font( "Helvetica", FontWeight.BOLD, 24 );
-                    gc.setFont( theFont );
-                    NumberFormat formatter = new DecimalFormat("#0.00");     
-                    String pointsText = "Time: " + formatter.format(t);
-                    gc.fillText( pointsText, 590,  50);
-                    gc.strokeText( pointsText, 590, 50);
+                    Font theFont = Font.font("Helvetica", FontWeight.BOLD, 24);
+                    gc.setFont(theFont);
+                    NumberFormat formatter = new DecimalFormat("#0.00");
+                    String score = formatter.format(t);
+                    String pointsText = "Time: " + score;
+                    gc.fillText(pointsText, 590, 50);
+                    gc.strokeText(pointsText, 590, 50);
                     
                     game.setScore((int) (Double.parseDouble(score)*100));
                   
@@ -238,8 +238,7 @@ public class ActionHandler {
                         missile.drawSprite(gc);
                     }
                 }
-            }
-        });
+            });
 
         return kf;
     }

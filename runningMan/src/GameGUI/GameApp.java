@@ -206,6 +206,7 @@ public class GameApp extends Application implements
 
         // Listen for user input continuously 
         ActionHandler ah = new ActionHandler(theStage, menu, gameLoop, control, gc, character, missile, complications, timeStart);
+        control.setActionHandler(ah);
         KeyFrame kf = ah.listen();
         gameLoop.getKeyFrames().add(kf);
         gameLoop.play();

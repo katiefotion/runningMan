@@ -195,6 +195,7 @@ public class Controller {
             GameApp.animateCharacter((int) (timer3 % 6));
         } else {
             GameApp.setStillCharacter();
+        }
         
         int missileCollision = -1;
         
@@ -244,10 +245,6 @@ public class Controller {
         }
     }
     
-    public void setActionHandler(ActionHandler ah) {
-        this.ah = ah;
-    }
-    
     public static int checkCollision(int missileX, int missileY, ArrayList<Integer> complicationsX, ArrayList<Integer> complicationsY, ArrayList<Image> complicationsImage) {
         
         for(int i = 0; i < complicationsX.size(); i++) {
@@ -295,6 +292,10 @@ public class Controller {
         return false;
     }
 
+    public void setActionHandler(ActionHandler ah) {
+        this.ah = ah;
+    }
+    
     public boolean checkMissile() {
         return this.game.currentState().containsMissile();
     }
