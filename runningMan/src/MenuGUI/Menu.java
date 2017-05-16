@@ -61,7 +61,7 @@ public class Menu {
             startImage = new ImageView(new Image(new FileInputStream("src/blue_button_startgame.png")));
             highscoresImage = new ImageView(new Image(new FileInputStream("src/blue_button_highscores.png")));
             quitImage = new ImageView(new Image(new FileInputStream("src/blue_button_quit.png")));
-            backgroundImage = new Image("background_game.png");
+            backgroundImage = new Image("background_menu.png");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
