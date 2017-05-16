@@ -8,6 +8,7 @@
 package GameGUI;
 
 import Controller.Controller;
+import GameObjects.Complication;
 import MenuGUI.Menu;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -39,7 +40,7 @@ public class ActionHandler {
     private final Controller control;
     private final GraphicsContext gc;
     private final Sprite character, missile;
-    private final ArrayList<Sprite> complications;
+    private ArrayList<Sprite> complications;
     private final long timeStart;
     private Menu menu;
     private Stage theStage;
@@ -169,16 +170,13 @@ public class ActionHandler {
                 public void handle(MouseEvent e)
                 {
                     if ((e.getX() > quitX) && (e.getX() < (quitX + quit.getWidth())) && (e.getY() > quitY) && (e.getY() < (quitY+quit.getHeight()))) {
-                        System.out.println("Quitting game...");
                         gameLoop.stop();
                         menu.showMenu(theStage);
                     }
                     else if ((e.getX() > pauseX) && (e.getX() < (pauseX + pause.getWidth())) && (e.getY() > pauseY) && (e.getY() < (pauseY+pause.getHeight()))) {
-                        System.out.println("Pausing game...");
                         gameLoop.pause();
                     }
                     else if ((e.getX() > playX) && (e.getX() < (playX + play.getWidth())) && (e.getY() > playY) && (e.getY() < (playY+play.getHeight()))) {
-                        System.out.println("Unpausing game...");
                         gameLoop.play();
                     }
                 }
@@ -194,8 +192,9 @@ public class ActionHandler {
                     
                     double t = (System.currentTimeMillis() - timeStart) / 1000.0;
                     
-                    if((t % 1000) == 0) 
-                        speedCoeff += 1;
+                    if((int)(t*100)%100 == 0 && t > 1) {
+                        speedCoeff += 0.5;
+                    }
                     
                     control.tick(speedCoeff, t);
                     
@@ -235,5 +234,15 @@ public class ActionHandler {
             });
         
         return kf;
+    }
+    
+    public void removeComplication(int i) {
+        
+        complications.remove(i);
+    }
+    
+    public void returnToMenu() {
+        gameLoop.stop();
+        menu.showMenu(theStage);
     }
 }

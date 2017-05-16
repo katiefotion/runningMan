@@ -110,11 +110,17 @@ public class GameApp extends Application implements
     }
   }
 
-  // Update complications' x values based on current model
-  public static void updateComplicationsX(ArrayList<Integer> xs, ArrayList<Integer> ys, ArrayList<Image> images) {
+  // Update complications' values based on current model
+  public static void updateComplications(ArrayList<Integer> xs, ArrayList<Integer> ys, ArrayList<Image> images, int removal) {
+    
     if(xs.size() > complications.size()) {
         complications.add(new Sprite(xs.get(xs.size()-1), ys.get(ys.size()-1), images.get(images.size()-1)));
     }
+    
+    if(xs.size() < complications.size()) {
+        complications.remove(removal);
+    }
+    
     for (int i = 0; i < xs.size(); i++) {
         complications.get(i).setX(xs.get(i));
     }
@@ -168,6 +174,7 @@ public class GameApp extends Application implements
 
     // Listen for user input continuously 
     ActionHandler ah = new ActionHandler(theStage, menu, gameLoop, control, gc, character, missile, complications, timeStart);
+    control.setActionHandler(ah);
     KeyFrame kf = ah.listen();
     gameLoop.getKeyFrames().add(kf);
     gameLoop.play();
