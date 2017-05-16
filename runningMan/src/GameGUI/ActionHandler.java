@@ -4,11 +4,12 @@
  * Listens for user input and updates control and view accordingly 
  * 
  */
-
 package GameGUI;
 
 import Controller.Controller;
 import GameObjects.Complication;
+import Game.Game;
+import Game.GameState;
 import MenuGUI.Menu;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -44,9 +45,11 @@ public class ActionHandler {
     private final long timeStart;
     private Menu menu;
     private Stage theStage;
-    
+    private Game game;
+    private GameState gameState;
+
     // Set background and button images and locations
-    final Image background = new Image("background.png");
+    final Image background = new Image("background_game.png");
     final Image quit = new Image("quit.png");
     final Image pause = new Image("pause.png");
     final Image play = new Image("play.png");
@@ -56,14 +59,16 @@ public class ActionHandler {
     final int pauseY = 20;
     final int playX = 260;
     final int playY = 20;
-    
+
     // Determines how fast the complications are moving 
     private int speedCoeff = 2;
-    
+
     public ActionHandler(Stage theStage, Menu menu, Timeline gameLoop, Controller control, GraphicsContext gc, Sprite character, Sprite missile, ArrayList<Sprite> complications, long timeStart) {
         this.theStage = theStage;
         this.theScene = theStage.getScene();
         this.menu = menu;
+        this.game = control.getGame();
+        this.gameState = game.currentState();
         this.gameLoop = gameLoop;
         this.control = control;
         this.gc = gc;
@@ -72,96 +77,95 @@ public class ActionHandler {
         this.timeStart = timeStart;
         this.missile = missile;
     }
-    
+
     public KeyFrame listen() {
-            
+
         theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            
+
             @Override
             public void handle(KeyEvent e) {
-                
+
                 KeyCode key = e.getCode();
-                
-                
-                if(key == KeyCode.SPACE && gameLoop.getStatus() == Animation.Status.RUNNING) {
-                
+
+                if (key == KeyCode.SPACE && gameLoop.getStatus() == Animation.Status.RUNNING) {
+
                     control.characterJump();
-                    
+
                     // Clear the canvas
-                    gc.clearRect(0, 0, 512,512);
+                    gc.clearRect(0, 0, 512, 512);
 
                     // background image clears canvas
                     gc.drawImage(background, 0, 0);
-                    
+
                     // Draw sprites
                     character.drawSprite(gc);
-                    
+
                 }
-                
-                if(key == KeyCode.RIGHT && gameLoop.getStatus() == Animation.Status.RUNNING){
+
+                if (key == KeyCode.RIGHT && gameLoop.getStatus() == Animation.Status.RUNNING) {
                     control.characterMoveRight(true);
-                    
+
                     // Clear the canvas
-                    gc.clearRect(0, 0, 512,512);
+                    gc.clearRect(0, 0, 512, 512);
 
                     // background image clears canvas
                     gc.drawImage(background, 0, 0);
-                    
+
                     // Draw sprites
                     character.drawSprite(gc);
                 }
-                
-                if(key == KeyCode.LEFT && gameLoop.getStatus() == Animation.Status.RUNNING){
+
+                if (key == KeyCode.LEFT && gameLoop.getStatus() == Animation.Status.RUNNING) {
                     control.characterMoveLeft(true);
-                    
+
                     // Clear the canvas
-                    gc.clearRect(0, 0, 512,512);
+                    gc.clearRect(0, 0, 512, 512);
 
                     // background image clears canvas
                     gc.drawImage(background, 0, 0);
-                    
+
                     // Draw sprites
                     character.drawSprite(gc);
                 }
-                
-                if(key == KeyCode.K && gameLoop.getStatus() == Animation.Status.RUNNING){
+
+                if (key == KeyCode.K && gameLoop.getStatus() == Animation.Status.RUNNING) {
                     control.characterShoot();
                 }
             }
         });
-        
+
         theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent e) {
-                
+
                 KeyCode key = e.getCode();
-                
-                if(key == KeyCode.RIGHT && gameLoop.getStatus() == Animation.Status.RUNNING){
-                    
+
+                if (key == KeyCode.RIGHT && gameLoop.getStatus() == Animation.Status.RUNNING) {
+
                     control.characterMoveRight(false);
                     // Clear the canvas
-                    gc.clearRect(0, 0, 512,512);
+                    gc.clearRect(0, 0, 512, 512);
 
                     // background image clears canvas
                     gc.drawImage(background, 0, 0);
-                    
+
                     // Draw sprites
                     character.drawSprite(gc);
                 }
-                if(key == KeyCode.LEFT && gameLoop.getStatus() == Animation.Status.RUNNING){
-                    
+                if (key == KeyCode.LEFT && gameLoop.getStatus() == Animation.Status.RUNNING) {
+
                     control.characterMoveLeft(false);
                     // Clear the canvas
-                    gc.clearRect(0, 0, 512,512);
+                    gc.clearRect(0, 0, 512, 512);
 
                     // background image clears canvas
                     gc.drawImage(background, 0, 0);
-                    
+
                     // Draw sprites
                     character.drawSprite(gc);
                 }
             }
-            
+
         });
         
         theScene.setOnMouseClicked(new EventHandler<MouseEvent>()
@@ -180,8 +184,9 @@ public class ActionHandler {
                         gameLoop.play();
                     }
                 }
-            });
-        
+            }
+        });
+
         KeyFrame kf = new KeyFrame(
             Duration.seconds(0.017),                // 60 FPS
             new EventHandler<ActionEvent>()
@@ -218,6 +223,8 @@ public class ActionHandler {
                     gc.fillText( pointsText, 590,  50);
                     gc.strokeText( pointsText, 590, 50);
                     
+                    game.setScore((int) (Double.parseDouble(score)*100));
+                  
                     // Draw quit button
                     gc.drawImage(quit, quitX, quitY);
                     
@@ -231,8 +238,9 @@ public class ActionHandler {
                         missile.drawSprite(gc);
                     }
                 }
-            });
-        
+            }
+        });
+
         return kf;
     }
     

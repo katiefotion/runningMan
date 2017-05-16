@@ -10,6 +10,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,6 +20,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ *
+ * @author Felix
+ */
 public class NetClientGet {
   
   public static int lastHighScoreId = 0;
@@ -55,7 +61,7 @@ public class NetClientGet {
             Document doc = builder.parse(new ByteArrayInputStream(msg.getBytes()));
 
             int hid;
-            double score;
+            int score;
             String playerName;
 
             /*
@@ -68,9 +74,27 @@ public class NetClientGet {
             for (int i = 0; i < hids.getLength(); i++) {
                 hid = Integer.parseInt(hids.item(i).getTextContent());
                 playerName = playerNames.item(i).getTextContent();
-                score = Double.parseDouble(scores.item(i).getTextContent());
+                score = (int) Double.parseDouble(scores.item(i).getTextContent());
                 highScores.add(new PlayerScore(hid, playerName, score));
             }
+            
+            //sort descending
+            Collections.sort(highScores, new Comparator<PlayerScore>() {
+                @Override
+                public int compare(PlayerScore scoreLeft, PlayerScore scoreRight) {
+                    int scoreL = scoreLeft.getScore();
+                    int scoreR = scoreRight.getScore();
+                    
+                    if(scoreL > scoreR) {
+                        return -1;
+                    }
+                    else if(scoreL < scoreR) {
+                        return 1;
+                    }
+                    
+                    return 0;
+                }
+            });
 
             getConnHighScores.disconnect();
 
@@ -99,8 +123,8 @@ public class NetClientGet {
             postConnHighScore.setRequestProperty("Content-Type", "application/xml");
 
             String playerName = playerScore.getName();
-            double score = playerScore.getScore();
-            int highScoreId = ++lastHighScoreId;
+            int score = playerScore.getScore();
+            int highScoreId = playerScore.getHid();
             
             String newHighScoreString
                     = "     <highscores> \n"

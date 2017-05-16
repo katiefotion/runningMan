@@ -7,51 +7,91 @@ package Database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  *
- * @author Flex
+ * @author Felix
  */
 public class HighScores {
-  
-  public static class PlayerScore {
-    private int hid;
-    private String name;
-    private double score;
-    
-    public PlayerScore(int hid, String name, double score) {
-      this.hid = hid;
-      this.name = name;
-      this.score = score;
+
+    public static class PlayerScore {
+
+        private int hid;
+        private String name;
+        private int score;
+
+        public PlayerScore(int hid, String name, int score) {
+            this.hid = hid;
+            this.name = name;
+            this.score = score;
+        }
+
+        public PlayerScore(String name, int score) {
+            this.hid = lastScoreId;
+            this.name = name;
+            this.score = score;
+        }
+
+        public int getHid() {
+            return this.hid;
+        }
+
+        public int getScore() {
+            return this.score;
+        }
+
+        public String getName() {
+            return this.name;
+        }
     }
-    
-    public int getHid() {
-      return this.hid;
-    } 
-    
-    public double getScore() {
-      return this.score;
+
+    public static int lastScoreId = 0;
+    private List<PlayerScore> highScores;
+
+    public HighScores() {
+        highScores = new ArrayList<>();
+
+        //TODO: call netClientGet to fill list of highscores
     }
-    
-    public String getName() {
-      return this.name;
+
+    //TODO: get the first limit number of scores in highScores list
+    public List<PlayerScore> getTopScores(int limit) {
+        List<PlayerScore> scores = null;
+
+        try {
+            scores = NetClientGet.getHighScores();
+            int numScores = scores.size();
+
+            if (limit > 0) {
+                if (numScores < limit) {
+                    scores = scores.subList(0, numScores);
+                } else {
+                    scores = scores.subList(0, limit);
+                }
+            }
+
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(HighScores.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            Logger.getLogger(HighScores.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return scores;
     }
-  }
-  
-  private List<PlayerScore> highScores;
-  
-  public HighScores() {
-    highScores = new ArrayList<>();
-    
-    //TODO: call netClientGet to fill list of highscores
-  }
-  
-  //TODO: get the first limit number of scores in highScores list
-  public List<PlayerScore> getTopScores(int limit) {
-    return new ArrayList<PlayerScore>();
-  }
-  
-  public void insertHighScore(PlayerScore playerScore) {
-    //TODO: call netClientGet to insert the highscore
-  }
+
+    public void insertHighScore(PlayerScore playerScore) {
+        try {
+            //TODO: call netClientGet to insert the highscore
+            NetClientGet.insertHighScore(playerScore);
+            lastScoreId++;
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(HighScores.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            Logger.getLogger(HighScores.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

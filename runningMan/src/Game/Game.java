@@ -40,4 +40,8 @@ public class Game {
         this.currentState.incrementScore(amount);
     }
     
+    public void setScore(int score) {
+        this.currentState.setScore(score);
+    }
+    
 }
