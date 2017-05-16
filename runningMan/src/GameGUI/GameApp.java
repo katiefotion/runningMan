@@ -11,13 +11,18 @@ import Database.HighScores;
 import Database.HighScores.PlayerScore;
 import Game.Game;
 import Game.Player;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.stage.Stage;
@@ -30,6 +35,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -39,8 +45,10 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 public class GameApp extends Application implements
         Menu.MenuEventListener {
@@ -310,15 +318,89 @@ public class GameApp extends Application implements
     @Override
     //TODO: replace with a new high score scene
     public void onHighScoresSelected() {
+
+
+        ImageView menuImage = new ImageView();
+        Image backgroundImage = new Image("background.png");
+
+ 
+        try {
+            
+            menuImage = new ImageView(new Image(new FileInputStream("src/main_menu.png")));
+            backgroundImage = new Image("background_endgame.png");
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(GameApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //set width and height of menuImage
+        menuImage.setFitWidth(256);
+        menuImage.setFitHeight(128);
+        
+        GridPane highScoreLayout = new GridPane();
+        VBox buttonsLayout = new VBox(4);
+        
+        buttonsLayout.getChildren().addAll(menuImage);
+        buttonsLayout.setAlignment(Pos.TOP_CENTER);
+        
+        //set high score layout 
+        highScoreLayout.setAlignment(Pos.CENTER);
+        highScoreLayout.setPadding(new Insets(10, 10, 10, 10));
+        
+        //set main menu button
+        highScoreLayout.add(buttonsLayout,0,0);
+        
+        Text text = new Text("HIGH SCORES");
+        text.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
+        text.setFill(Color.WHITE);
+        
+        highScoreLayout.add(text,0,1);
+        
+        //TODO: Set highscores here (unsure if it works)
         HighScores highscores = new HighScores();
         List<PlayerScore> scores = highscores.getTopScores(10);
-
+        int i = 2; //counter to place scores
         if (scores != null) {
             for (PlayerScore score : scores) {
-                System.out.println(score.getName() + " : " + score.getScore());
+                Text t = new Text();
+                t.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
+                t.setFill(Color.WHITE);
+                t.setText(i + " : " + score.getName() + " : " + score.getScore());
+                
+                //add to highScoreLayout
+                highScoreLayout.add(t,0,i);
+                i++;
             }
         }
+        
+        i = 0; //bring back to zero in the end to fix any potential errors
+        
+        //set background image
+        highScoreLayout.setBackground(new Background(
+            new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+        
+        menuImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event){
+                    showMenu();
+                }
+            });
+        
+   
+        gameScene.setRoot(highScoreLayout);
+        theStage.show();
     }
+//         highscore = new HighScore(this);
+//        HighScores highscores = new HighScores();
+//        List<PlayerScore> scores = highscores.getTopScores(10);
+//
+//        if (scores != null) {
+//            for (PlayerScore score : scores) {
+//                System.out.println(score.getName() + " : " + score.getScore());
+//            }
+//        }
+    
 
     @Override
     public void onQuitSelected() {
