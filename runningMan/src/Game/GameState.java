@@ -182,7 +182,7 @@ public class GameState {
         pastChoice = compChoice;
         
         // Then delete first element of Array List if too long to improve runtime 
-        if(complications.size() > 3) {
+        if(complications.size() > 5) {
             complications.remove(0);
             return true;
         }
