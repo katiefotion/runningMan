@@ -44,9 +44,9 @@ public class Menu {
 
     }
 
-    private final int MENU_PADDING = 4;
+    private final int MENU_PADDING = 16;
     private final int MENU_BUTTON_WIDTH = 256;
-    private final int MENU_BUTTON_HEIGHT = 128;
+    private final int MENU_BUTTON_HEIGHT = 64;
 
     private ImageView startImage;
     private ImageView highscoresImage;
@@ -58,9 +58,9 @@ public class Menu {
 
     public Menu(MenuEventListener listener) {
         try {
-            startImage = new ImageView(new Image(new FileInputStream("src/start_button.png")));
-            highscoresImage = new ImageView(new Image(new FileInputStream("src/highscores_button.png")));
-            quitImage = new ImageView(new Image(new FileInputStream("src/quit_button.png")));
+            startImage = new ImageView(new Image(new FileInputStream("src/blue_button_startgame.png")));
+            highscoresImage = new ImageView(new Image(new FileInputStream("src/blue_button_highscores.png")));
+            quitImage = new ImageView(new Image(new FileInputStream("src/blue_button_quit.png")));
             backgroundImage = new Image("background_game.png");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
