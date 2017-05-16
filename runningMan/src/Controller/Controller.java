@@ -7,6 +7,7 @@
 package Controller;
 
 import Game.Game;
+import GameGUI.ActionHandler;
 import GameGUI.GameApp;
 import GameObjects.Character;
 import GameObjects.*;
@@ -33,6 +34,8 @@ import javafx.scene.layout.VBox;
  * @author katie
  */
 public class Controller {
+    
+    private ActionHandler ah;
 
     private final Game game;
     private double timer1 = 4;
@@ -77,8 +80,8 @@ public class Controller {
     public void characterJump() {
 
         // Make character in model jump after checking if character is in the air
+
         if (c.getY() >= 275) {
-            //System.out.println("going up");
             c.setGoingUp(true);
         }
 
@@ -155,41 +158,20 @@ public class Controller {
     public void tick(int speedCoeff, double t) {
 
         timer3 = timer3 + .2;
-        boolean shiftedImage = game.currentState().tick(speedCoeff, t, c.getX());
-
-        if (shiftedImage) {
-
-            ArrayList<Image> compImageTemp = new ArrayList<>();
-            for (int i = 1; i < complicationsImage.size(); i++) {
-                compImageTemp.add(complicationsImage.get(i));
-            }
-
-            complicationsImage = compImageTemp;
-        }
 
         //redraws character sprite each frame
         GameApp.setCharacterY(c.getY());
         GameApp.setCharacterX(c.getX());
-        //System.out.println(game.getCharacter().getY());
-        //chararctr keeps going down if not on floor level
-        //if(game.getCharacter().getY()<=275){
-        //    timer = timer + .2;
-        //    game.getCharacter().setY((int) (game.getCharacter().getY()+timer));    
-        //}
-        //else
-        //    timer = 0;
+
         if (c.isGoingUp() && c.getY() >= 275 - c.getJumpHeight()) {
-            //System.out.println("going up initiation");
             timer1 = timer1 - .2;
-            //System.out.println(timer);
             c.setY((int) (c.getY() - timer1));
         } else {
             timer1 = 12;
         }
-        if (c.getY() < 280 - c.getJumpHeight()) {
-            //System.out.println("not going up");
+
+        if(c.getY()<280-c.getJumpHeight()){
             c.setGoingUp(false);
-            //System.out.println("going down");
             c.setGoingDown(true);
         }
         if (c.isGoingDown() && c.getY() < 275) {
@@ -213,21 +195,46 @@ public class Controller {
             GameApp.animateCharacter((int) (timer3 % 6));
         } else {
             GameApp.setStillCharacter();
-        }
-        if (this.game.currentState().containsMissile()) {
-
+        
+        int missileCollision = -1;
+        
+        if(this.checkMissile()) {
+          
             GameApp.setMissileX(game.currentState().getMissileX());
             GameApp.setMissileY(game.currentState().getMissileY());
+            
+            missileCollision = checkCollision(game.currentState().getMissileX(), game.currentState().getMissileY(), complicationsX, complicationsY, complicationsImage);
+            
+            if(missileCollision >= 0) {
+                                
+                game.currentState().removeMissile();
+                game.currentState().removeComplication(missileCollision);
+                ah.removeComplication(missileCollision);
+            }
         }
 
+        
+        boolean shiftedImage = game.currentState().tick(speedCoeff, t,c.getX());
+        
+        if(shiftedImage) {
+            ArrayList<Image> compImageTemp = new ArrayList<>();
+            for(int i = 1; i < complicationsImage.size(); i++) {
+                compImageTemp.add(complicationsImage.get(i));
+            }
+            
+            complicationsImage = compImageTemp;
+        }
+        
         // Increment complications' x coordinates with time  
         // (and y coordinates in case new complication is created)
         this.setComplicationsX();
         this.setComplicationsY();
         this.setComplicationsImage();
-        GameApp.updateComplicationsX(complicationsX, complicationsY, complicationsImage);
 
-        // Check if character and complications collid
+        
+        GameApp.updateComplications(complicationsX, complicationsY, complicationsImage, missileCollision);
+       
+        // Check if character and complications collide
         boolean collision = checkCollision(c, complicationsX, complicationsY, complicationsImage);
 
         if (collision) {
@@ -236,6 +243,34 @@ public class Controller {
             GameApp.onEndGame(score);
         }
     }
+    
+    public void setActionHandler(ActionHandler ah) {
+        this.ah = ah;
+    }
+    
+    public static int checkCollision(int missileX, int missileY, ArrayList<Integer> complicationsX, ArrayList<Integer> complicationsY, ArrayList<Image> complicationsImage) {
+        
+        for(int i = 0; i < complicationsX.size(); i++) {
+            
+            int compX = complicationsX.get(i);
+            int compY = complicationsY.get(i);
+            int compWidth = complicationsImage.get(i).widthProperty().intValue();
+            int compHeight = complicationsImage.get(i).heightProperty().intValue();
+            
+            
+            if(compY == 445)
+            {
+                if((Math.abs(missileX - compX) < (compWidth-280)) && (Math.abs((missileY+445) - compY) > 280))
+                    return i;
+            }
+            if((Math.abs(missileX - (compX)) < (compWidth-15)) && (Math.abs(missileY - compY) < compHeight)) 
+                return i;
+        }
+        
+        
+        return -1;
+    }
+
 
     public static boolean checkCollision(Character c, ArrayList<Integer> complicationsX, ArrayList<Integer> complicationsY, ArrayList<Image> complicationsImage) {
 
@@ -246,14 +281,12 @@ public class Controller {
             int compWidth = complicationsImage.get(i).widthProperty().intValue();
             int compHeight = complicationsImage.get(i).heightProperty().intValue();
 
-            // System.out.println(compY);
-            // System.out.println("Char: " + c.getY());
             if (compY == 450) {
-                //c.setVelY(15);
                 if ((Math.abs(c.getX() - compX) < (compWidth - 250)) && (Math.abs((c.getY() + 450) - compY) > 270)) {
                     return true;
                 }
             }
+        
             if ((Math.abs(c.getX() - compX) < (compWidth)) && (Math.abs(c.getY() - compY) < compHeight)) {
                 return true;
             }

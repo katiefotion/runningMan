@@ -7,6 +7,7 @@
 package GameGUI;
 
 import Controller.Controller;
+import GameObjects.Complication;
 import Game.Game;
 import Game.GameState;
 import MenuGUI.Menu;
@@ -40,7 +41,7 @@ public class ActionHandler {
     private final Controller control;
     private final GraphicsContext gc;
     private final Sprite character, missile;
-    private final ArrayList<Sprite> complications;
+    private ArrayList<Sprite> complications;
     private final long timeStart;
     private Menu menu;
     private Stage theStage;
@@ -166,76 +167,90 @@ public class ActionHandler {
             }
 
         });
-
-        theScene.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                if ((e.getX() > quitX) && (e.getX() < (quitX + quit.getWidth())) && (e.getY() > quitY) && (e.getY() < (quitY + quit.getHeight()))) {
-                    System.out.println("Quitting game...");
-                    gameLoop.stop();
-                    menu.showMenu(theStage);
-                } else if ((e.getX() > pauseX) && (e.getX() < (pauseX + pause.getWidth())) && (e.getY() > pauseY) && (e.getY() < (pauseY + pause.getHeight()))) {
-                    System.out.println("Pausing game...");
-                    gameLoop.pause();
-                } else if ((e.getX() > playX) && (e.getX() < (playX + play.getWidth())) && (e.getY() > playY) && (e.getY() < (playY + play.getHeight()))) {
-                    System.out.println("Unpausing game...");
-                    gameLoop.play();
+        
+        theScene.setOnMouseClicked(new EventHandler<MouseEvent>()
+            {
+                @Override
+                public void handle(MouseEvent e)
+                {
+                    if ((e.getX() > quitX) && (e.getX() < (quitX + quit.getWidth())) && (e.getY() > quitY) && (e.getY() < (quitY+quit.getHeight()))) {
+                        gameLoop.stop();
+                        menu.showMenu(theStage);
+                    }
+                    else if ((e.getX() > pauseX) && (e.getX() < (pauseX + pause.getWidth())) && (e.getY() > pauseY) && (e.getY() < (pauseY+pause.getHeight()))) {
+                        gameLoop.pause();
+                    }
+                    else if ((e.getX() > playX) && (e.getX() < (playX + play.getWidth())) && (e.getY() > playY) && (e.getY() < (playY+play.getHeight()))) {
+                        gameLoop.play();
+                    }
                 }
             }
         });
 
         KeyFrame kf = new KeyFrame(
-                Duration.seconds(0.017), // 60 FPS
-                new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent ae) {
-
-                double t = (System.currentTimeMillis() - timeStart) / 1000.0;
-
-                if ((t % 1000) == 0) {
-                    speedCoeff += 1;
-                }
-
-                control.tick(speedCoeff, t);
-
-                // Clear the canvas
-                gc.clearRect(0, 0, 512, 512);
-
-                // background image clears canvas
-                gc.drawImage(background, 0, 0);
-
-                // Draw sprites
-                character.drawSprite(gc);
-                for (int i = 0; i < complications.size(); i++) {
-                    complications.get(i).drawSprite(gc);
-                }
-
-                // Draw score
-                Font theFont = Font.font("Helvetica", FontWeight.BOLD, 24);
-                gc.setFont(theFont);
-                NumberFormat formatter = new DecimalFormat("#0.00");
-                String score = formatter.format(t);
-                String pointsText = "Time: " + score;
-                gc.fillText(pointsText, 590, 50);
-                gc.strokeText(pointsText, 590, 50);
-
-                game.setScore((int) (Double.parseDouble(score)*100));
-
-                // Draw quit button
-                gc.drawImage(quit, quitX, quitY);
-
-                // Draw pause button
-                gc.drawImage(pause, pauseX, pauseY);
-
-                // Draw play button
-                gc.drawImage(play, playX, playY);
-
-                if (control.checkMissile()) {
-                    missile.drawSprite(gc);
+            Duration.seconds(0.017),                // 60 FPS
+            new EventHandler<ActionEvent>()
+            {
+                @Override
+                public void handle(ActionEvent ae)
+                {            
+                    
+                    double t = (System.currentTimeMillis() - timeStart) / 1000.0;
+                    
+                    if((int)(t*100)%100 == 0 && t > 1) {
+                        speedCoeff += 0.5;
+                    }
+                    
+                    control.tick(speedCoeff, t);
+                    
+                    // Clear the canvas
+                    gc.clearRect(0, 0, 512,512);
+                    
+                    // background image clears canvas
+                    gc.drawImage(background, 0, 0);
+                    
+                    // Draw sprites
+                    character.drawSprite(gc);
+                    for(int i = 0; i < complications.size(); i++) {
+                        complications.get(i).drawSprite(gc);
+                    }
+                    
+                    // Draw score
+                    Font theFont = Font.font( "Helvetica", FontWeight.BOLD, 24 );
+                    gc.setFont( theFont );
+                    NumberFormat formatter = new DecimalFormat("#0.00");     
+                    String pointsText = "Time: " + formatter.format(t);
+                    gc.fillText( pointsText, 590,  50);
+                    gc.strokeText( pointsText, 590, 50);
+                    
+                    game.setScore((int) (Double.parseDouble(score)*100));
+                  
+                    // Draw quit button
+                    gc.drawImage(quit, quitX, quitY);
+                    
+                    // Draw pause button
+                    gc.drawImage(pause, pauseX, pauseY);
+                    
+                    // Draw play button
+                    gc.drawImage(play, playX, playY);
+                    
+                    if(control.checkMissile()){
+                        missile.drawSprite(gc);
+                    }
                 }
             }
         });
 
         return kf;
+    }
+    
+    public void removeComplication(int i) {
+        
+        complications.remove(i);
+    }
+    
+    public void returnToMenu() {
+        gameLoop.stop();
+        menu.showMenu(theStage);
     }
 }

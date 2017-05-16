@@ -20,13 +20,12 @@ public class GameState {
     private int currentScore;
     private List<Complication> complications;
     private Missile m;
-    boolean spawn_flag = true;
 
+    int pastChoice = -1;
+    
     public GameState() {
-
-        this.complications = new ArrayList();
-        Complication.initComplication(this);
-
+        
+        this.complications = new ArrayList();  
         this.currentScore = 0;
     }
 
@@ -132,10 +131,10 @@ public class GameState {
         if (this.containsMissile()) {
             m.tick();
         }
-
-        if ((int) (t * 100) % 600 == 0 && t > 1) {
+        
+        if((int)(t*100)%200 == 0 && t > 1)
+        {
             boolean shiftedImage = this.update(ch);
-
             return shiftedImage;
         }
 
@@ -157,7 +156,10 @@ public class GameState {
         Random rand = new Random();
         ArrayList state = (ArrayList) this.getComplications();
         int compChoice = rand.nextInt(3); // produces a random number to spawn a certain obstacle
-        //System.out.println("CompChoice: " + compChoice);
+
+        if(compChoice == 1 && pastChoice == 1)
+            compChoice = 2;
+        
         switch (compChoice) {
             //TODO: set y to respective y-coords (image)
             case 0: //produces an obstacle
@@ -172,26 +174,28 @@ public class GameState {
                 Threat t = new Threat(x + 800, 300);//call threat class to instatitate a threat
                 state.add(t);
                 break;
-            default:
-                System.out.println("Error here.");
-                //do nothing, continue on.
+            default: 
                 break;
         }
         this.setNewComplications(state);//add the new arrayList to gameState
-
+        
+        pastChoice = compChoice;
+        
         // Then delete first element of Array List if too long to improve runtime 
-        if (complications.size() > 3) {
-            List<Complication> comp_temp = new ArrayList<>();
-
-            for (int i = 1; i < complications.size(); i++) {
-                comp_temp.add(complications.get(i));
-            }
-
-            complications = comp_temp;
-
+        if(complications.size() > 3) {
+            complications.remove(0);
             return true;
         }
 
         return false;
+    }
+    
+    public void removeMissile() {
+        m = null;
+    }
+    
+    public void removeComplication(int i) {
+        
+        complications.remove(i);
     }
 }

@@ -23,6 +23,7 @@ public class RunningMan {
      */
     public static void main(String[] args) {
 
+
         //just testing that rest server works (this should not break.
         //if it does, make sure your database is setup properly
 
