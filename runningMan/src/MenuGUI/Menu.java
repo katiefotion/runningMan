@@ -57,6 +57,8 @@ public class Menu {
     private VBox buttonsLayout;
 
     public Menu(MenuEventListener listener) {
+        
+        //tries to load button images for menu
         try {
             startImage = new ImageView(new Image(new FileInputStream("src/blue_button_startgame.png")));
             highscoresImage = new ImageView(new Image(new FileInputStream("src/blue_button_highscores.png")));
@@ -66,6 +68,7 @@ public class Menu {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        //initializing buttons
         startImage.setFitWidth(MENU_BUTTON_WIDTH);
         startImage.setFitHeight(MENU_BUTTON_HEIGHT);
 
@@ -95,6 +98,8 @@ public class Menu {
     }
 
     private void initMenuListeners(MenuEventListener listener) {
+        
+        //if start image is pressed game starts
         if (startImage != null) {
             startImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -118,6 +123,7 @@ public class Menu {
             });
         }
 
+        //if quit button is pressed user exits
         if (quitImage != null) {
             quitImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -141,6 +147,7 @@ public class Menu {
             });
         }
 
+        //when highscore button is pressed user is taken to high score page
         if (highscoresImage != null) {
             highscoresImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
