@@ -11,12 +11,14 @@ import java.awt.Graphics;
  *
  * @author jeffreyhu
  */
+
+//missle speed is set to 15
 public class Missile extends GameObject {
     public Missile(int x, int y) {
         super(x, y);
         this.setVelX(15);
     }
-
+//missle goes to the right by 15 pixels
     @Override
     public void tick() {
         this.setX(this.getX() + this.getVelX());
