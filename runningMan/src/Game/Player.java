@@ -15,7 +15,7 @@ public class Player {
     
     private final int playerId;
     
-    // Constor 
+    // Constructor 
     public Player(int id) {
         
         this.playerId = id;
