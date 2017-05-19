@@ -96,20 +96,23 @@ public class GameApp extends Application implements
     public static void showMenu() {
         menu.showMenu(theStage);
     }
+        
     // Set character's y value based on current model
-
     public static void setCharacterY(int y) {
         character.setY(y);
     }
 
+    // Set character's x value based on current model
     public static void setCharacterX(int x) {
         character.setX(x);
     }
 
+    // sets image for character in still position
     public static void setStillCharacter() {
         character.setImage(new Image("character_1.png"));
     }
 
+    //animates character based on the frame number to set image for character
     public static void animateCharacter(int x) {
         switch (x) {
             case 0:
@@ -135,10 +138,12 @@ public class GameApp extends Application implements
         }
     }
 
+    //set missle x coordinate
     public static void setMissileX(int x) {
         missile.setX(x);
     }
 
+    //set missle y coordinate
     public static void setMissileY(int y) {
         missile.setY(y);
     }
@@ -224,6 +229,7 @@ public class GameApp extends Application implements
         theStage.show();
     }
 
+    //when player dies
     public static void onEndGame(int score) {
         gameLoop.stop();
 
@@ -244,6 +250,7 @@ public class GameApp extends Application implements
         ImageView returnMenuButton = null;
 
         try {
+            //buttons for submitting and returning
             submitButton = new ImageView(new Image(new FileInputStream("src/blue_button_submit.png")));
             returnMenuButton = new ImageView(new Image(new FileInputStream("src/blue_button_menu.png")));
 
@@ -256,16 +263,19 @@ public class GameApp extends Application implements
             Logger.getLogger(GameApp.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        //name text field
         nameLabel.setText("Name: ");
         nameLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
         nameLabel.setTextFill(Color.WHITE);
 
+        //score text display
         scoreLabel.setText("Score: ");
         scoreValueLabel.setText(String.valueOf(score));
         scoreLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
         scoreValueLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
         scoreValueLabel.setTextFill(Color.WHITE);
 
+        //prompt user to enter name
         nameText.setPromptText("Enter your name");
 
         gridLayout.add(nameLabel, 0, 0);
@@ -276,6 +286,7 @@ public class GameApp extends Application implements
         gridLayout.add(returnMenuButton, 0, 2);
         gridLayout.setAlignment(Pos.CENTER);
 
+        //when user clicks on submit button, highscore is stored to database
         submitButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
@@ -292,6 +303,7 @@ public class GameApp extends Application implements
             }
         });
 
+        //cursor becomes hand when on submit button
         submitButton.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
@@ -306,6 +318,7 @@ public class GameApp extends Application implements
             }
         });
 
+        //when user clicks on menu button, returns to menu
         returnMenuButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
@@ -374,6 +387,8 @@ public class GameApp extends Application implements
         HighScores highscores = new HighScores();
         List<PlayerScore> scores = highscores.getTopScores(10);
         int i = 1; //counter to place scores
+            
+        //displays top users and their high scores
         if (scores != null) {
             for (PlayerScore score : scores) {
                 Text t = new Text();
