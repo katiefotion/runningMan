@@ -80,6 +80,7 @@ public class ActionHandler {
 
     public KeyFrame listen() {
 
+        //when user presses key
         theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
             @Override
@@ -87,8 +88,10 @@ public class ActionHandler {
 
                 KeyCode key = e.getCode();
 
+                //when user presses spacebar
                 if (key == KeyCode.SPACE && gameLoop.getStatus() == Animation.Status.RUNNING) {
 
+                    //character jump
                     control.characterJump();
 
                     // Clear the canvas
@@ -102,7 +105,10 @@ public class ActionHandler {
 
                 }
 
+                //when user presses right
                 if (key == KeyCode.RIGHT && gameLoop.getStatus() == Animation.Status.RUNNING) {
+                    
+                    //character moves right
                     control.characterMoveRight(true);
 
                     // Clear the canvas
@@ -115,7 +121,10 @@ public class ActionHandler {
                     character.drawSprite(gc);
                 }
 
+                //when user presses left
                 if (key == KeyCode.LEFT && gameLoop.getStatus() == Animation.Status.RUNNING) {
+                    
+                    //character moves left
                     control.characterMoveLeft(true);
 
                     // Clear the canvas
@@ -134,15 +143,19 @@ public class ActionHandler {
             }
         });
 
+        //when user releases a key
         theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent e) {
 
                 KeyCode key = e.getCode();
 
+                //when user releases right key
                 if (key == KeyCode.RIGHT && gameLoop.getStatus() == Animation.Status.RUNNING) {
 
+                    //character is not moving right
                     control.characterMoveRight(false);
+                    
                     // Clear the canvas
                     gc.clearRect(0, 0, 512, 512);
 
@@ -152,8 +165,11 @@ public class ActionHandler {
                     // Draw sprites
                     character.drawSprite(gc);
                 }
+                
+                //when user releases left key
                 if (key == KeyCode.LEFT && gameLoop.getStatus() == Animation.Status.RUNNING) {
 
+                    //character is not moving left
                     control.characterMoveLeft(false);
                     // Clear the canvas
                     gc.clearRect(0, 0, 512, 512);
@@ -173,13 +189,18 @@ public class ActionHandler {
                 @Override
                 public void handle(MouseEvent e)
                 {
+                    //when user presses quit button, game stops and user is broght back to menu
                     if ((e.getX() > quitX) && (e.getX() < (quitX + quit.getWidth())) && (e.getY() > quitY) && (e.getY() < (quitY+quit.getHeight()))) {
                         gameLoop.stop();
                         menu.showMenu(theStage);
                     }
+                    
+                    //when user presses pause button, game stops
                     else if ((e.getX() > pauseX) && (e.getX() < (pauseX + pause.getWidth())) && (e.getY() > pauseY) && (e.getY() < (pauseY+pause.getHeight()))) {
                         gameLoop.pause();
                     }
+                    
+                    //when user presses play button, game plays
                     else if ((e.getX() > playX) && (e.getX() < (playX + play.getWidth())) && (e.getY() > playY) && (e.getY() < (playY+play.getHeight()))) {
                         gameLoop.play();
                     }
@@ -196,6 +217,7 @@ public class ActionHandler {
                     
                     double t = (System.currentTimeMillis() - timeStart) / 1000.0;
                     
+                    //speed increases for complications
                     if((int)(t*100)%100 == 0 && t > 1) {
                         speedCoeff += 0.5;
                     }
