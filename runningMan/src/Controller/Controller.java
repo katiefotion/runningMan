@@ -80,7 +80,6 @@ public class Controller {
     public void characterJump() {
 
         // Make character in model jump after checking if character is in the air
-
         if (c.getY() >= 275) {
             c.setGoingUp(true);
         }
@@ -89,11 +88,13 @@ public class Controller {
         GameApp.setCharacterY(c.getY());
     }
 
+    //missle is presented in front of character
     public void characterShoot() {
         Missile m = new Missile(this.game.getCharacter().getX() + 10, this.game.getCharacter().getY());
         this.game.currentState().addMissile(m);
     }
 
+    //checks if character is moving right
     public void characterMoveRight(boolean b) {
 
         c.setRunningRight(b);
@@ -102,6 +103,7 @@ public class Controller {
         GameApp.setCharacterX(c.getX());
     }
 
+    //checks if character is moving left
     public void characterMoveLeft(boolean b) {
 
         c.setRunningLeft(b);
@@ -157,12 +159,15 @@ public class Controller {
 
     public void tick(int speedCoeff, double t) {
 
+        //timer for animation increases
         timer3 = timer3 + .2;
 
         //redraws character sprite each frame
         GameApp.setCharacterY(c.getY());
         GameApp.setCharacterX(c.getX());
 
+        //if character is going up but not too up, character's y position is set from what timer is
+        //timer decreases to represent gravity
         if (c.isGoingUp() && c.getY() >= 275 - c.getJumpHeight()) {
             timer1 = timer1 - .2;
             c.setY((int) (c.getY() - timer1));
@@ -170,27 +175,35 @@ public class Controller {
             timer1 = 12;
         }
 
+        //if character reaches a limit c switches from going up to going down
         if(c.getY()<280-c.getJumpHeight()){
             c.setGoingUp(false);
             c.setGoingDown(true);
         }
+        
+        //if character is going down and in air character's y position is set from what timer is
+        //timer increases to represent graity
         if (c.isGoingDown() && c.getY() < 275) {
             timer2 = timer2 + .2;
             c.setY((int) (c.getY() + timer2));
         } else {
             timer2 = 0;
         }
+        //if character is at ground level, not going down
         if (c.getY() > 275) {
             c.setGoingDown(false);
         }
+        //if character is going right move right
         if (c.isRunningRight()) {
             c.moveRight();
         }
 
+        //if character is going left move left
         if (c.isRunningLeft()) {
             c.moveLeft();
         }
 
+        //if character is not in the air animate the character
         if (!c.isGoingUp() && !c.isGoingDown()) {
             GameApp.animateCharacter((int) (timer3 % 6));
         } else {
@@ -199,16 +212,21 @@ public class Controller {
         
         int missileCollision = -1;
         
+        //if there is a missle
         if(this.checkMissile()) {
           
+            //set missle coordinates
             GameApp.setMissileX(game.currentState().getMissileX());
             GameApp.setMissileY(game.currentState().getMissileY());
             
             missileCollision = checkCollision(game.currentState().getMissileX(), game.currentState().getMissileY(), complicationsX, complicationsY, complicationsImage);
             
+            //if missle collision
             if(missileCollision >= 0) {
-                                
+                
+                //missle is removed
                 game.currentState().removeMissile();
+                //complication is removed
                 game.currentState().removeComplication(missileCollision);
                 ah.removeComplication(missileCollision);
             }
