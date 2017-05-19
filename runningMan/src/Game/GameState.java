@@ -29,13 +29,15 @@ public class GameState {
         this.currentScore = 0;
     }
 
+    //checks if there is a missle in the current state
     public boolean containsMissile() {
         if (this.m == null) {
             return false;
         }
         return true;
     }
-
+    
+    //adds missle to state
     public void addMissile(Missile m) {
         this.m = m;
     }
@@ -46,6 +48,7 @@ public class GameState {
         this.currentScore += amount;
     }
 
+    //sets score to a specified score
     public void setScore(int score) {
 
         this.currentScore = score;
@@ -124,6 +127,7 @@ public class GameState {
 
     public boolean tick(int speedCoeff, double t, int ch) {
 
+        //complication position goes to the left
         for (Complication c : complications) {
             c.setX(c.getX() - speedCoeff);
         }
@@ -141,10 +145,12 @@ public class GameState {
         return false;
     }
 
+    //get missle X coordinate
     public int getMissileX() {
         return m.getX();
     }
 
+    //get missle Y coordinate
     public int getMissileY() {
         return m.getY();
     }
@@ -157,6 +163,7 @@ public class GameState {
         ArrayList state = (ArrayList) this.getComplications();
         int compChoice = rand.nextInt(3); // produces a random number to spawn a certain obstacle
 
+        //in case the second complication is a pit
         if(compChoice == 1 && pastChoice == 1)
             compChoice = 2;
         
