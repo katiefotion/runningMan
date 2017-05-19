@@ -22,6 +22,7 @@ public class Character extends GameObject{
         super(x, y);
     }
 
+    
     @Override
     public void tick() {
         this.setVelX(this.getX() + this.getVelX());
@@ -41,10 +42,12 @@ public class Character extends GameObject{
         
     }
     
+    //character moves to the right by 3 pixels
     public void moveRight(){
         this.setX(this.getX()+3);
     }
     
+    //character moves to the left by 3 pixels
     public void moveLeft(){
         this.setX(this.getX()-3);
     }
