@@ -17,6 +17,7 @@ public class Game {
     private Character character;
     private GameState currentState;
     
+    //Game constructor
     public Game(Player player) {
         
         this.player = player;
@@ -35,11 +36,11 @@ public class Game {
     public GameState currentState() {
         return this.currentState;
     }
-    
+    //increase score by an amount
     public void incrementScore(int amount) {
         this.currentState.incrementScore(amount);
     }
-    
+    set score to a certain score
     public void setScore(int score) {
         this.currentState.setScore(score);
     }
