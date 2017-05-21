@@ -9,7 +9,9 @@ HOW TO SETUP YOUR OWN DATABASE/SERVER
 2. Use the following settings to configure the new database:
 
 	Database Name: RunningMan
+  
   Database Password: runningman
+  
   User: Team2
 
 3. Connect to the Team2 database server and execute the "createHighScore" sql script located in the sqlscripts.
